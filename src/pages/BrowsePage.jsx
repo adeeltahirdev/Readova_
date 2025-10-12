@@ -218,6 +218,15 @@ const BrowsePage = () => {
         <main className="book-listing">
           <div className="listing-header">
             <h2>All Books</h2>
+            <div className="sort-options">
+              <label>Sort By:</label>
+              <select id="sort-by">
+                <option value="newest">Newest</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="popularity">Popularity</option>
+              </select>
+            </div>
           </div>
 
           <div className="b-book-grid">
