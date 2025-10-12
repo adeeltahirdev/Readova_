@@ -22,7 +22,7 @@ const BrowsePage = () => {
         const res = await api.get("/showbooks");
         const apiBooks = (res.data.books || []).map((book) => ({
           title: book.title,
-          author: book.author,
+          author: book.authors,
           rating: book.rating || "",
           categories: book.categories || "Unknown",
           price: book.price || "",
@@ -242,7 +242,6 @@ const BrowsePage = () => {
                   <div className="b-price">
                     {book.price ? `$${book.price}` : "Price not set"}
                   </div>
-                  <div className="b-category">{book.categories}</div>
                   <button className="b-btn-view">View</button>
                 </div>
               </div>
