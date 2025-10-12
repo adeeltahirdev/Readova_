@@ -3,7 +3,7 @@ import AuthLayout from "../../layouts/AuthLayout.jsx";
 import { Link } from "react-router-dom";
 import { MdEmail, MdLock, MdPerson2 } from "react-icons/md";
 import '../../assets/css/login.css';
-import axios from '../../../api/axios.js';
+import axios from "../../../api/axios";
 
 const RegisterPage = () => {
   const [login, setLogin] = useState(true);
