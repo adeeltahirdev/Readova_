@@ -79,8 +79,9 @@ const RegisterPage = () => {
               <div className="forgot-link">
                 <Link to="#">Forgot password?</Link>
               </div>
-              <button type="submit" className="auth-btn">Login</button>
-              {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
+             <button type="submit" className="auth-btn">Login</button>
+              {loginError && <div className="auth-message error">{loginError}</div>}
+
             </form>
           </div>
 
@@ -118,8 +119,9 @@ const RegisterPage = () => {
                 <MdLock className="icon" />
               </div>
               <button type="submit" className="auth-btn">Sign up</button>
-              {signupError && <div style={{ color: 'red' }}>{signupError}</div>}
-              {signupSuccess && <div style={{ color: 'green' }}>{signupSuccess}</div>}
+{signupError && <div className="auth-message error">{signupError}</div>}
+{signupSuccess && <div className="auth-message success">{signupSuccess}</div>}
+
             </form>
           </div>
           <div className="toggle-box">

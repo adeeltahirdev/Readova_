@@ -817,8 +817,11 @@ label input[type="checkbox"] {
 .checkout-container {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   padding: 3rem;
-  gap: 2rem;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  animation: fadeIn 0.6s ease-in-out;
 }
 
 .checkout-left,
@@ -827,29 +830,81 @@ label input[type="checkbox"] {
   padding: 2rem;
   border-radius: 10px;
   flex: 1;
+  min-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.checkout-right {
-  max-width: 400px;
+.checkout-left:hover,
+.checkout-right:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-heading {
+  margin-bottom: 1.5rem;
+  color: #001f59;
 }
 
 .book-detail {
   display: flex;
   gap: 1.2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
 }
 
 .book-image {
   width: 80px;
   height: 120px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 .summary-item {
   margin-bottom: 1.2rem;
   border-bottom: 1px solid #ddd;
   padding-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.days-label {
+  display: block;
+  font-weight: 600;
+  color: #001f59;
+  margin-bottom: 0.5rem;
+}
+
+.days-input {
+  margin-left: 10px;
+  width: 70px;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.days-input:focus {
+  border-color: #001f59;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 31, 89, 0.3);
+}
+
+.days-error {
+  color: #b30000;
+  background-color: #ffe5e5;
+  border: 1px solid #ffb3b3;
+  border-radius: 6px;
+  font-size: 1.4rem;
+  padding: 0.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.total-text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #001f59;
+  margin-top: 1.5rem;
 }
 
 .checkout-button {
@@ -861,21 +916,44 @@ label input[type="checkbox"] {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-}
-
-.days-label {
+  transition: background-color 0.2s ease, transform 0.2s ease;
   margin-top: 1rem;
-  display: block;
-  font-weight: 500;
 }
 
-.days-input {
-  margin-left: 1rem;
-  width: 60px;
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.checkout-button:hover {
+  background-color: #002b7f;
+  transform: translateY(-2px);
 }
+
+.checkout-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkout-container {
+    flex-direction: column;
+    padding: 2rem;
+  }
+  .checkout-left,
+  .checkout-right {
+    width: 100%;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 /* ******************* */
 /* Pricing  */  

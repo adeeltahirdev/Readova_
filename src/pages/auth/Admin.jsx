@@ -392,7 +392,7 @@ const Admin = () => {
                     <section className="quick-actions">
                         <h2 className="section-title">Quick Actions</h2>
                         <div className="actions-grid">
-                            <div className="action-card">
+                            {/* <div className="action-card">
                                 <i className="fas fa-user-plus"></i>
                                 <h3>Add User</h3>
                                 <p>Create new user accounts</p>
@@ -401,7 +401,7 @@ const Admin = () => {
                                 <i className="fas fa-file-import"></i>
                                 <h3>Bulk Import</h3>
                                 <p>Import books in bulk</p>
-                            </div>
+                            </div> */}
                             <div className="action-card">
                                 <i className="fas fa-chart-line"></i>
                                 <h3>View Reports</h3>

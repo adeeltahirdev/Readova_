@@ -1,31 +1,48 @@
 import React, { useState } from "react";
 import CheckLayout from "../layouts/CheckLayout";
 
+
 const BorrowCheckout = () => {
-  const [days, setDays] = useState(7); // Default borrow duration
+  const [days, setDays] = useState(7);
+  const [error, setError] = useState("");
 
   const books = [
     {
       title: "The Midnight Library",
       author: "Matt Haig",
       pricePerDay: 30,
-      image: "https://via.placeholder.com/100",
+      image: "https://via.placeholder.com/100x150",
     },
     {
       title: "Atomic Habits",
       author: "James Clear",
       pricePerDay: 40,
-      image: "https://via.placeholder.com/100",
+      image: "https://via.placeholder.com/100x150",
     },
   ];
 
   const total = books.reduce((acc, book) => acc + book.pricePerDay * days, 0);
 
+  const handleDaysChange = (e) => {
+    const value = Number(e.target.value);
+    if (value < 1 || value > 30) {
+      setError("Days must be between 1 and 30");
+    } else {
+      setError("");
+      setDays(value);
+    }
+  };
+
+  const handleCheckout = () => {
+    alert("Checkout complete! (demo)");
+  };
+
   return (
     <CheckLayout>
       <div className="checkout-container">
+        {/* Left Section */}
         <div className="checkout-left">
-          <h2>Books You're Borrowing</h2>
+          <h2 className="checkout-heading">Books You're Borrowing</h2>
           {books.map((book, index) => (
             <div key={index} className="book-detail">
               <img src={book.image} alt={book.title} className="book-image" />
@@ -38,19 +55,24 @@ const BorrowCheckout = () => {
           ))}
         </div>
 
+        {/* Right Section */}
         <div className="checkout-right">
-          <h2>Order Summary</h2>
-          <label>
+          <h2 className="checkout-heading">Order Summary</h2>
+
+          <label className="days-label">
             Days to Borrow:
             <input
               type="number"
               value={days}
               min={1}
               max={30}
-              onChange={(e) => setDays(Number(e.target.value))}
-              style={{ marginLeft: "10px", width: "60px" }}
+              onChange={handleDaysChange}
+              className="days-input"
             />
           </label>
+
+          {error && <p className="days-error">{error}</p>}
+
           {books.map((book, index) => (
             <div key={index} className="summary-item">
               <p>
@@ -61,8 +83,16 @@ const BorrowCheckout = () => {
               <p>Total: Rs. {book.pricePerDay * days}</p>
             </div>
           ))}
-          <h3>Total: Rs. {total}</h3>
-          <button className="checkout-button">Proceed to Checkout</button>
+
+          <h3 className="total-text">Total: Rs. {total}</h3>
+
+          <button
+            className="checkout-button"
+            onClick={handleCheckout}
+            disabled={!!error}
+          >
+            Proceed to Checkout
+          </button>
         </div>
       </div>
     </CheckLayout>

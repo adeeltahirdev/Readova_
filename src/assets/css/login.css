@@ -11,8 +11,8 @@ html {
 
 body {
   min-height: 100vh;
-  background-image: url("../img/body-bg.jpg");
-  background-size: cover;
+  /* background-image: url("../img/body-bg.jpg"); */
+  /* background-size: cover; */
 }
 
 /* .acc {
@@ -371,4 +371,45 @@ form {
   .toggle-panel h1 {
     font-size: 30px;
   }
+}
+
+/* ====== Auth Message Styling ====== */
+.auth-message {
+  margin-top: 10px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* Login or Signup Error */
+.auth-message.error {
+  color: #b30000;
+  background-color: #ffe5e5;
+  border: 1px solid #ffb3b3;
+}
+
+/* Signup Success Message */
+.auth-message.success {
+  color: #0a6e27;
+  background-color: #e7f9ed;
+  border: 1px solid #b3e6c2;
+  margin-top: 2px;
+}
+
+/* Make the admin login error message look like the user login error */
+.admin-login-form .error-message {
+  background-color: #ffe5e5 !important;
+  border: 1px solid #ffb3b3 !important;
+  color: #b30000 !important;
+  font-size: 1.4rem !important;
+  font-weight: 500;
+  padding: 10px 15px !important;
+  border-radius: 6px !important;
+  text-align: center;
+  margin-top: 10px !important;
+  width: 100%;
+  box-sizing: border-box;
 }
