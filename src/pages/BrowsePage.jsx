@@ -17,31 +17,57 @@ const BrowsePage = () => {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const res = await api.get("/showbooks");
-        const apiBooks = (res.data.books || []).map((book) => ({
-          title: book.title,
-          author: book.authors,
-          rating: book.rating || "",
-          categories: book.categories || "Unknown",
-          price: book.price || "",
-          availability: book.availability || "",
-          img:
-            book.thumbnail ||
-            "https://via.placeholder.com/150x220?text=No+Image",
-        }));
-        const uniqueCategories = [...new Set(apiBooks.map((b) => b.categories))];
-        setBooks(apiBooks);
-        setFilteredBooks(apiBooks);
-        setCategories(uniqueCategories);
-      } catch (err) {
-        console.error("Error fetching books:", err);
-      }
-    };
+  const fetchBooks = async () => {
+    try {
+      const res = await api.get("/showbooks");
+      const apiBooks = (res.data.books || []).map((book) => ({
+        title: book.title,
+        author: book.authors,
+        rating: book.rating || "",
+        categories: book.categories || "Unknown",
+        price: book.price || "",
+        availability: book.availability || "",
+        img:
+          book.thumbnail ||
+          "https://via.placeholder.com/150x220?text=No+Image",
+      }));
 
-    fetchBooks();
-  }, []);
+      //  Category grouping map
+      const categoryGroups = {
+        fiction: ["fiction", "novel", "literature", "drama"],
+        "non-fiction": ["non-fiction", "biography", "history", "self-help", "education"],
+        mystery: ["mystery", "thriller", "crime", "detective"],
+        fantasy: ["fantasy", "adventure", "mythology", "magical"],
+        "sci-fi": ["sci-fi", "science fiction", "space", "technology", "future"],
+      };
+
+      //  Function to normalize book category
+      const mapToMainCategory = (cat) => {
+        const normalized = cat.toLowerCase();
+        for (const [main, keywords] of Object.entries(categoryGroups)) {
+          if (keywords.some((k) => normalized.includes(k))) return main;
+        }
+        return "fiction"; // default fallback
+      };
+
+      //  Assign grouped categories to each book
+      const groupedBooks = apiBooks.map((b) => ({
+        ...b,
+        categories: mapToMainCategory(b.categories),
+      }));
+
+      // Show only 5 filters in sidebar
+      const visibleCategories = ["fiction", "non-fiction", "mystery", "fantasy", "sci-fi"];
+
+      setBooks(groupedBooks);
+      setFilteredBooks(groupedBooks);
+      setCategories(visibleCategories);
+    } catch (err) {
+      console.error("Error fetching books:", err);
+    }
+  };
+  fetchBooks();
+}, []);
 
   const handleFilterChange = (e) => {
     const { name, value, checked } = e.target;
