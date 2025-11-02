@@ -13,13 +13,14 @@ const Footer = () => {
 
                         <address className="contacts">
                             <p className="address">
-                                623 Harrison St., 2nd Floor, San Francisco, CA 94107
+                                NUML Multan Campus,<br/>
+                                Multan, Pakistan
                             </p>
                             <p>
                                 <a className="footer-link" href="tel:415-201-6370">415-201-6370</a
                                 ><br/>
                                 <a className="footer-link" href="mailto:hello@readova.com"
-                                >hello@readova.com</a
+                                >info@readova.com</a
                                 >
                             </p>
                         </address>
@@ -61,8 +62,8 @@ const Footer = () => {
                 <nav className="nav-col">
                     <p className="footer-heading">SERVICES</p>
                     <ul className="footer-nav">
-                        <li><a className="footer-link" href="#">Order</a></li>
-                        <li><a className="footer-link" href="#">Checkout</a></li>
+                        <li><a className="footer-link" href="#">Borrow</a></li>
+                        <li><a className="footer-link" href="#">Membership</a></li>
                         <li>
                             <a className="footer-link" href="/library#wishlist-bookmarks"
                             >Wishlist</a
