@@ -106,10 +106,10 @@ const Navbar = () => {
                   <Link to="/library">My Library</Link>
                 </li>
                 <li>
-                  <Link to="/settings">Subscription</Link>
+                  <Link to="/pricing">Subscription</Link>
                 </li>
                 <li>
-                  <Link to="/logout">Logout</Link>
+                  <Link to="#">Logout</Link>
                 </li>
               </ul>
             </div>
