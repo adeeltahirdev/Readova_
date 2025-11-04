@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "../../layouts/AdminLayout.jsx";
-import { MdDashboard, MdLibraryBooks, MdPerson, MdSettings, MdEmail, MdLock } from "react-icons/md";
+import { MdDashboard, MdLibraryBooks, MdPerson, MdSettings, MdEmail, MdLock, MdCategory, MdSubscriptions, MdOutlineSubscriptions } from "react-icons/md";
+import { FaCrown,FaUser } from 'react-icons/fa6';
 import { Link } from "react-router";
 import "../../assets/css/Admin.css";
 import "../../assets/css/login.css";
+import Logo from "../../assets/images/Logo.png";
 
 const Admin = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,7 +122,8 @@ const Admin = () => {
                 {/* Sidebar */}
                 <aside className="admin-sidebar">
                     <div className="sidebar-header">
-                        <h2 className="admin-logo">Readova Admin</h2>
+                       <img src={Logo} alt="" className="logo" />
+                        <h2 className="admin-logo">Admin</h2>
                     </div>
                     
                     <nav className="sidebar-nav">
@@ -143,21 +146,21 @@ const Admin = () => {
                                     <span>Users Management</span>
                                 </Link>
                             </li>
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <Link to="#categories" className="nav-link">
-                                    <i className="fas fa-tags"></i>
+                                    <MdCategory className="nav-icon" />
                                     <span>Categories</span>
                                 </Link>
-                            </li>
+                            </li> */}
                             <li className="nav-item">
                                 <Link to="#subscriptions" className="nav-link">
-                                    <i className="fas fa-crown"></i>
+                                    <FaCrown className="nav-icon" />
                                     <span>Subscriptions</span>
                                 </Link>
                             </li>
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <Link to="#analytics" className="nav-link">
-                                    <i className="fas fa-chart-bar"></i>
+                                    <MdPerson className="nav-icon" />
                                     <span>Analytics</span>
                                 </Link>
                             </li>
@@ -166,7 +169,7 @@ const Admin = () => {
                                     <MdSettings className="nav-icon" />
                                     <span>Settings</span>
                                 </Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </nav>
                     
@@ -187,7 +190,7 @@ const Admin = () => {
                         </div>
                         <div className="header-right">
                             <div className="admin-user">
-                                <img src="admin-avatar.jpg" alt="Admin" className="user-avatar" />
+                                <FaUser className="admin-user-icon" />
                                 <span className="user-name">Admin User</span>
                                 <button 
                                     onClick={handleLogout}
