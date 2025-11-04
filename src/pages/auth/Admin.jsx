@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "../../layouts/AdminLayout.jsx";
-import { MdDashboard, MdLibraryBooks, MdPerson, MdSettings, MdEmail, MdLock } from "react-icons/md";
+import { MdDashboard, MdLibraryBooks, MdPerson, MdSettings, MdEmail, MdLock, MdCategory, MdSubscriptions, MdOutlineSubscriptions } from "react-icons/md";
+import { FaCrown,FaUser } from 'react-icons/fa6';
 import { Link } from "react-router";
 import "../../assets/css/Admin.css";
 import "../../assets/css/login.css";
+import Logo from "../../assets/images/Logo.png";
 
 const Admin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,10 +59,7 @@ const Admin = () => {
       setIsLoggedIn(true);
     }
   }, []);
-
-  // If not logged in, show nothing (to prevent flash before redirect)
   if (!isLoggedIn) return null;
-
   return (
     <AdminLayout>
       <div className="admin-container">
@@ -69,7 +68,6 @@ const Admin = () => {
           <div className="sidebar-header">
             <h2 className="admin-logo">Readova Admin</h2>
           </div>
-          
           <nav className="sidebar-nav">
             <ul className="nav-menu">
               <li className="nav-item active">
@@ -116,7 +114,6 @@ const Admin = () => {
               </li>
             </ul>
           </nav>
-          
           <div className="sidebar-footer">
             <Link to="/" className="back-to-site">
               <i className="fas fa-arrow-left"></i>
@@ -124,7 +121,6 @@ const Admin = () => {
             </Link>
           </div>
         </aside>
-
         {/* Main Content */}
         <main className="admin-main">
           {/* Header */}

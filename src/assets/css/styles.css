@@ -13,6 +13,129 @@
 /* ************* */
 /* Navigation */
 /* ************* */
+
+/* ===================== */
+/* User Dropdown */
+/* ===================== */
+
+.user-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.user-icon-wrapper {
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
+/* Show dropdown when hovered */
+.user-dropdown-container:hover .user-dropdown {
+  display: block;
+}
+
+.user-dropdown {
+  display: none;
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  background-color: #1a356a;
+  color: #fff;
+  border-radius: 8px;
+  width: 180px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 999;
+  padding: 1rem 0;
+}
+
+.user-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-dropdown ul li {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.5rem;
+  transition: background 0.2s;
+}
+
+.user-dropdown ul li:hover {
+  background-color: #2a4b8a;
+}
+
+.user-dropdown ul li a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+}
+
+/* ===================== */
+/* Mobile User Dropdown Inside Menu */
+/* ===================== */
+.mobile-user-dropdown {
+  width: 100%;
+}
+
+.mobile-account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.6rem;
+  color: #fff;
+  cursor: pointer;
+  padding: 1rem 0;
+  transition: background 0.2s;
+}
+
+.mobile-account:hover {
+  background-color: #2a4b8a;
+  border-radius: 8px;
+  padding-left: 0.5rem;
+}
+
+.mobile-user-dropdown-menu {
+  background-color: #1a356a;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  margin-top: 0.3rem;
+  animation: dropdown-slide 0.25s ease;
+}
+
+.mobile-user-dropdown-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-user-dropdown-menu li {
+  padding: 0.8rem 0;
+}
+
+.mobile-user-dropdown-menu li a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  font-size: 1.4rem;
+}
+
+.mobile-user-dropdown-menu li:hover {
+  background-color: #2a4b8a;
+  border-radius: 6px;
+  padding-left: 0.5rem;
+}
+
+@keyframes dropdown-slide {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 /* Notification Dropdown Container */
 .notification-container {
   position: relative;
