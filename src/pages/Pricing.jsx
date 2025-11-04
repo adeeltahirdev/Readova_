@@ -68,7 +68,7 @@ const Pricing = () => {
                                     handlePlanSelect('Basic');
                                 }}
                             >
-                                Start Free Trial
+                                Subscribe
                             </a>
                         </div>
                         
@@ -98,7 +98,7 @@ const Pricing = () => {
                                     handlePlanSelect('Premium');
                                 }}
                             >
-                                Start Free Trial
+                                Subscribe
                             </a>
                         </div>
                     </div>
