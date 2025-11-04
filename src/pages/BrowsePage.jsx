@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import api from "../../api/axios";
 import MainLayout from "../layouts/MainLayout.jsx";
+import { Link } from "react-router";
 
 const BrowsePage = () => {
   const [books, setBooks] = useState([]);
@@ -21,6 +22,7 @@ const BrowsePage = () => {
     try {
       const res = await api.get("/showbooks");
       const apiBooks = (res.data.books || []).map((book) => ({
+        id: book.id,
         title: book.title,
         author: book.authors,
         rating: book.rating || "",
@@ -268,7 +270,7 @@ const BrowsePage = () => {
                   <div className="b-price">
                     {book.price ? `$${book.price}` : "Price not set"}
                   </div>
-                  <button className="b-btn-view">View</button>
+                  <Link to={`/book/${book.id}`} className="b-btn-view">View Details</Link>
                 </div>
               </div>
             ))}

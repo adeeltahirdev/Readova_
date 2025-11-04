@@ -19,18 +19,29 @@ const RegisterPage = () => {
   const [signupSuccess, setSignupSuccess] = useState('');
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoginError('');
-    try {
-      const res = await axios.post('/login', {
-        email: loginEmail,
-        password: loginPassword,
-      });
-      window.location.href = '/library'; 
-    } catch (err) {
-      setLoginError(err.response?.data?.message || 'Login failed');
-    }
-  };
+  e.preventDefault();
+  setLoginError('');
+
+  
+  if (loginEmail === 'admin@gmail.com' && loginPassword === 'admin123') {
+    localStorage.setItem('adminAuth', 'true');
+    window.location.href = '/admin';
+    return;
+  }
+
+  try {
+    const res = await axios.post('/login', {
+      email: loginEmail,
+      password: loginPassword,
+    });
+
+    localStorage.setItem('userAuth', 'true');
+    window.location.href = '/library';
+  } catch (err) {
+    setLoginError(err.response?.data?.message || 'Login failed');
+  }
+};
+
 
   const handleSignup = async (e) => {
     e.preventDefault();

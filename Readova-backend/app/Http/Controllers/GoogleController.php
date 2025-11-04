@@ -66,6 +66,14 @@ class GoogleController extends Controller
             'books' => $books,
         ]);
     }
+    public function detail($id)
+    {
+        $book = Books::find($id);
+        if (!$book) {
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+        return response()->json(['book' => $book]);
+    }
 
     public function show(Request $request)
     {

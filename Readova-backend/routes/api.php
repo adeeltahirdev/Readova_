@@ -16,3 +16,5 @@ Route::post('delete', [LoginController::class, 'destroy']);
 
 Route::get('/books', [GoogleController::class, 'index']);
 Route::get('/showbooks', [GoogleController::class, 'show']);
+
+Route::get('/books/{id}', [GoogleController::class, 'detail']);
