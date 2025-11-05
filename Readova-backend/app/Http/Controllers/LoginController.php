@@ -19,11 +19,15 @@ class LoginController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'is_admin' => false,
         ]);
 
         return response()->json([
             'message' => 'User registered successfully',
             'user' => $user,
+            'name' => $user->name,
+            'email' => $user->email,
+            'is_admin' => $user->is_admin,
         ], 201);
     }
 
@@ -41,6 +45,25 @@ class LoginController extends Controller
         }
         return response()->json(['message' => 'Login successful', 'user' => $user]);
     }
+
+  public function me(Request $request)
+{
+    // Validate that email is provided
+    $request->validate([
+        'email' => 'required|email',
+    ]);
+
+    // Find the user by email or fail
+    $user = User::where('email', $request->email)->firstOrFail();
+
+    return response()->json([
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'is_admin' => $user->is_admin,
+    ]);
+}
+
 
     public function destroy(Request $request)
     {

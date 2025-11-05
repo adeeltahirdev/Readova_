@@ -16,8 +16,13 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'System Admin',
+            'email' => 'system-admin@readova.com',
+            'password' => '$2y$12$25htsejEzu7zG4sCzWiD0u6RD5HE1PcpqUKMY/yCKTG4nd7y6VPJa',
+            'is_admin' => true,
+        ]);
+        $this->call([
+            TypeSeeder::class,
         ]);
     }
 }
