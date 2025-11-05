@@ -1,20 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../../assets/images/Logo.png";
 import { MdPerson2, MdNotifications, MdMenu, MdClose } from "react-icons/md";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../../../api/axios";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+
+  const isLoggedIn =
+    localStorage.getItem("userAuth") === "true" ||
+    localStorage.getItem("adminAuth") === "true";
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!isLoggedIn) return;
+
+      try {
+        const email = localStorage.getItem("userEmail");
+        const res = await axios.get("/user", {
+          params: { email },
+        });
+
+        if (res.data && res.data.name) {
+          setUsername(res.data.name);
+        }
+      } catch (err) {
+        console.log("Error fetching user info:", err);
+      }
+    };
+
+    fetchUser();
+  }, [isLoggedIn]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-
     if (!isMobileMenuOpen) {
       document.body.classList.add("nav-open");
     } else {
       document.body.classList.remove("nav-open");
-      setIsMobileUserMenuOpen(false); // close user dropdown when menu closes
+      setIsMobileUserMenuOpen(false);
     }
   };
 
@@ -24,13 +51,23 @@ const Navbar = () => {
     document.body.classList.remove("nav-open");
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userAuth");
+    localStorage.removeItem("adminAuth");
+    setUsername("");
+    navigate("/auth/register");
+    closeMobileMenu();
+  };
+
   return (
     <>
+      {" "}
       <nav className="navbar font-one">
+        {" "}
         <div className="navbar-left">
-          <img src={Logo} alt="" className="logo" />
+          {" "}
+          <img src={Logo} alt="" className="logo" />{" "}
         </div>
-
         {/* Desktop Links */}
         <ul className="nav-links">
           <li>
@@ -71,12 +108,10 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
-
         {/* Desktop Right Section */}
         <div className="navbar-right">
           <input type="text" className="search-bar" placeholder="Search..." />
 
-          {/* Notification Icon + Dropdown */}
           <div className="notification-container">
             <div className="notification-icon-wrapper">
               <MdNotifications className="log-icon" />
@@ -92,28 +127,37 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Desktop User Dropdown */}
-          <div className="user-dropdown-container">
-            <div className="user-icon-wrapper">
-              <MdPerson2 className="log-icon" />
+          {/* Only show user dropdown if logged in */}
+          {isLoggedIn && (
+            <div className="user-dropdown-container">
+              <div className="user-icon-wrapper">
+                {username || <MdPerson2 className="log-icon" />}
+              </div>
+              <div className="user-dropdown">
+                <ul>
+                  <li>
+                    <span className="username-display">{username}</span>
+                  </li>
+                  <li>
+                    <Link to="/library">My Library</Link>
+                  </li>
+                  <li>
+                    <Link to="/pricing">Subscription</Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleLogout();
+                      }}>
+                      Logout
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div className="user-dropdown">
-              <ul>
-                <li>
-                  <Link to="/profile">Profile</Link>
-                </li>
-                <li>
-                  <Link to="/library">My Library</Link>
-                </li>
-                <li>
-                  <Link to="/pricing">Subscription</Link>
-                </li>
-                <li>
-                  <Link to="#">Logout</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
+          )}
 
           {/* Mobile Menu Toggle Button */}
           <button className="btn-mobile-nav" onClick={toggleMobileMenu}>
@@ -125,7 +169,6 @@ const Navbar = () => {
           </button>
         </div>
       </nav>
-
       {/* Mobile Navigation Menu */}
       <div className={`mobile-nav-menu ${isMobileMenuOpen ? "nav-open" : ""}`}>
         <div className="mobile-nav-content">
@@ -134,14 +177,13 @@ const Navbar = () => {
             className="mobile-nav-search"
             placeholder="Search books..."
           />
-
           <ul className="mobile-nav-links">
             <li>
               <Link to="/" onClick={closeMobileMenu}>
                 Home
               </Link>
             </li>
-            <li className="mobile-dropdown">
+            <li>
               <Link to="/browse" onClick={closeMobileMenu}>
                 Browse All
               </Link>
@@ -152,7 +194,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/Pricing" onClick={closeMobileMenu}>
+              <Link to="/pricing" onClick={closeMobileMenu}>
                 Pricing
               </Link>
             </li>
@@ -175,51 +217,47 @@ const Navbar = () => {
             </li>
           </ul>
 
-          {/* Mobile Bottom Section (Notifications + Account) */}
-          <div className="mobile-nav-actions">
-            <div className="mobile-notification">
-              <MdNotifications className="mobile-icon" />
-              <span>Notifications</span>
-            </div>
-
-            {/* Mobile User Dropdown Inside Panel */}
-            <div className="mobile-user-dropdown">
-              <div
-                className="mobile-account"
-                onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}
-              >
-                <MdPerson2 className="mobile-icon" />
-                <span>Account</span>
+          {/* Mobile Bottom Section */}
+          {isLoggedIn && (
+            <div className="mobile-nav-actions">
+              <div className="mobile-notification">
+                <MdNotifications className="mobile-icon" />
+                <span>Notifications</span>
               </div>
-
-              {isMobileUserMenuOpen && (
-                <div className="mobile-user-dropdown-menu">
-                  <ul>
-                    <li>
-                      <Link to="/profile" onClick={closeMobileMenu}>
-                        Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/library" onClick={closeMobileMenu}>
-                        My Library
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/settings" onClick={closeMobileMenu}>
-                        Subscription
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/logout" onClick={closeMobileMenu}>
-                        Logout
-                      </Link>
-                    </li>
-                  </ul>
+              <div className="mobile-user-dropdown">
+                <div
+                  className="mobile-account"
+                  onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}>
+                  <MdPerson2 className="mobile-icon" />
+                  <span>{username || "Account"}</span>
                 </div>
-              )}
+                {isMobileUserMenuOpen && (
+                  <div className="mobile-user-dropdown-menu">
+                    <ul>
+                      <li>
+                        <span className="username-display">{username}</span>
+                      </li>
+                      <li>
+                        <Link to="/library" onClick={closeMobileMenu}>
+                          My Library
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/settings" onClick={closeMobileMenu}>
+                          Subscription
+                        </Link>
+                      </li>
+                      <li>
+                        <button className="logout-btn" onClick={handleLogout}>
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
