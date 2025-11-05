@@ -107,10 +107,7 @@ const BookDetail = () => {
               <p className="book-author">By {book.authors}</p>
 
               <div className="book-actions">
-                <a href="#" className="btn btn-full"  onClick={() => toast.success(`${book.title} successfully added to borrow!`, {
-    style: { background: "#1a356a", color: "white" } // blue background, white text
-  })}
->
+                <a href="#" className="btn btn-full"  onClick={() => navigate('/borrowcheckout')}>
                   Borrow
                 </a>
                 <a href="/pricing" className="btn btn-outline subscribe-btn">
