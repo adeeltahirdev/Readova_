@@ -113,6 +113,9 @@ const BookDetail = () => {
                 <a href="/pricing" className="btn btn-outline subscribe-btn">
                   Subscribe
                 </a>
+                <a href="/pricing" className="btn btn-outline subscribe-btn">
+                  Show Book
+                </a>
               </div>
 
               <div className="book-description">{renderDescription()}</div>
