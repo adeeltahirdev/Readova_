@@ -15,9 +15,10 @@ Route::post('login', [LoginController::class, 'show']);
 Route::post('register', [LoginController::class, 'create']);
 Route::post('delete', [LoginController::class, 'destroy']);
 Route::get('/user', [LoginController::class, 'me']);
-
+Route::get('/allusers', [LoginController::class, 'index']);
 Route::get('/books', [GoogleController::class, 'index']);
 Route::get('/showbooks', [GoogleController::class, 'show']);
+Route::delete('/books/{id}', [GoogleController::class, 'destroy']);
 
 Route::get('/books/{id}', [GoogleController::class, 'detail']);  
 Route::post('/subscribeplan', [UserPriceController::class, 'store']);

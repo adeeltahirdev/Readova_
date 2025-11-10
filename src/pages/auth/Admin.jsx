@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
+import axios from "../../../api/axios.js";
 import AdminLayout from "../../layouts/AdminLayout.jsx";
-import { MdDashboard, MdLibraryBooks, MdPerson, MdSettings, MdEmail, MdLock, MdCategory, MdSubscriptions, MdOutlineSubscriptions } from "react-icons/md";
-import { FaCrown,FaUser } from 'react-icons/fa6';
-import { Link } from "react-router";
+import { MdDashboard, MdLibraryBooks, MdPerson, MdSettings } from "react-icons/md";
+import { Link } from "react-router-dom";
 import "../../assets/css/Admin.css";
 import "../../assets/css/login.css";
 import Logo from "../../assets/images/Logo.png";
@@ -10,56 +10,55 @@ import Logo from "../../assets/images/Logo.png";
 const Admin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalBooks, setTotalBooks] = useState(0);
+  const [loadingStats, setLoadingStats] = useState(true);
 
-  // Admin credentials
   const adminCredentials = {
-    username: 'admin@gmail.com',
-    password: 'admin123'
+    username: "admin@gmail.com",
+    password: "admin123",
   };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setError('');
+  const fetchStats = async () => {
+    try {
+      const usersRes = await axios.get("/allusers");
+      setTotalUsers(usersRes.data.users?.length || 0);
 
-    if (username === adminCredentials.username && password === adminCredentials.password) {
-      localStorage.setItem('adminAuth', 'true');
-      setIsLoggedIn(true);
-    } else {
-      setError('Invalid admin credentials');
+      const booksRes = await axios.get("/showbooks");
+      setTotalBooks(booksRes.data.total || 0);
+    } catch (err) {
+      console.error("Error fetching stats:", err);
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminAuth');
+    localStorage.removeItem("adminAuth");
     setIsLoggedIn(false);
-    setUsername('');
-    setPassword('');
-
-    // Try to close the tab
-    window.close();
-
-    // Fallback redirect if browser blocks tab closing
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 300);
+    window.location.href = "/";
   };
 
-  // 🔒 Check if user is authenticated — redirect if not
+  // Check auth on mount
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('adminAuth');
+    const isAuthenticated = localStorage.getItem("adminAuth");
     if (!isAuthenticated) {
-      window.location.href = '/'; // redirect unauthorized visitors to home
+      window.location.href = "/";
     } else {
       setIsLoggedIn(true);
     }
   }, []);
-  if (!isLoggedIn) return null;
+
+  // Fetch stats when logged in
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchStats().finally(() => setLoadingStats(false));
+    }
+  }, [isLoggedIn]);
+
+  if (!isLoggedIn || loadingStats) return null;
+
   return (
     <AdminLayout>
       <div className="admin-container">
@@ -71,39 +70,21 @@ const Admin = () => {
           <nav className="sidebar-nav">
             <ul className="nav-menu">
               <li className="nav-item active">
-                <Link to="#dashboard" className="nav-link">
+                <Link to="/admin" className="nav-link">
                   <MdDashboard className="nav-icon" />
                   <span>Dashboard</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="#books" className="nav-link">
+                <Link to="/admin/books" className="nav-link">
                   <MdLibraryBooks className="nav-icon" />
                   <span>Books Management</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="#users" className="nav-link">
+                <Link to="/admin/users" className="nav-link">
                   <MdPerson className="nav-icon" />
                   <span>Users Management</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="#categories" className="nav-link">
-                  <i className="fas fa-tags"></i>
-                  <span>Categories</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="#subscriptions" className="nav-link">
-                  <i className="fas fa-crown"></i>
-                  <span>Subscriptions</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="#analytics" className="nav-link">
-                  <i className="fas fa-chart-bar"></i>
-                  <span>Analytics</span>
                 </Link>
               </li>
               <li className="nav-item">
@@ -121,6 +102,7 @@ const Admin = () => {
             </Link>
           </div>
         </aside>
+
         {/* Main Content */}
         <main className="admin-main">
           {/* Header */}
@@ -130,20 +112,20 @@ const Admin = () => {
             </div>
             <div className="header-right">
               <div className="admin-user">
-                <img src="admin-avatar.jpg" alt="Admin" className="user-avatar" />
+                <img src={Logo} alt="Admin" className="user-avatar" />
                 <span className="user-name">Admin User</span>
-                <button 
+                <button
                   onClick={handleLogout}
                   className="logout-btn"
                   style={{
-                    marginLeft: '15px',
-                    padding: '8px 16px',
-                    background: '#ff4444',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    fontSize: '14px'
+                    marginLeft: "15px",
+                    padding: "8px 16px",
+                    background: "#ff4444",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    fontSize: "14px",
                   }}
                 >
                   Logout
@@ -159,21 +141,21 @@ const Admin = () => {
                 <i className="fas fa-book"></i>
               </div>
               <div className="stat-info">
-                <h3 className="stat-number">1,247</h3>
+                <h3 className="stat-number">{totalBooks}</h3>
                 <p className="stat-label">Total Books</p>
               </div>
             </div>
-            
+
             <div className="stat-card">
               <div className="stat-icon total-users">
                 <i className="fas fa-users"></i>
               </div>
               <div className="stat-info">
-                <h3 className="stat-number">8,542</h3>
+                <h3 className="stat-number">{totalUsers}</h3>
                 <p className="stat-label">Total Users</p>
               </div>
             </div>
-            
+
             <div className="stat-card">
               <div className="stat-icon active-subscriptions">
                 <i className="fas fa-crown"></i>
@@ -183,7 +165,7 @@ const Admin = () => {
                 <p className="stat-label">Active Subscriptions</p>
               </div>
             </div>
-            
+
             <div className="stat-card">
               <div className="stat-icon revenue">
                 <i className="fas fa-dollar-sign"></i>
@@ -200,8 +182,7 @@ const Admin = () => {
             <div className="section-header">
               <h2 className="section-title">Books Management</h2>
               <button className="btn btn-primary" onClick={openModal}>
-                <i className="fas fa-plus"></i>
-                Add New Book
+                <i className="fas fa-plus"></i> Add New Book
               </button>
             </div>
 
@@ -219,38 +200,29 @@ const Admin = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td><img src="book1.jpg" alt="Book Cover" className="book-cover-small" /></td>
+                    <td>
+                      <img
+                        src="book1.jpg"
+                        alt="Book Cover"
+                        className="book-cover-small"
+                      />
+                    </td>
                     <td>The Midnight Library</td>
                     <td>Matt Haig</td>
                     <td>Fiction</td>
-                    <td><span className="status-badge status-active">Active</span></td>
+                    <td>
+                      <span className="status-badge status-active">Active</span>
+                    </td>
                     <td className="action-buttons">
-                      <button className="btn-action btn-edit" title="Edit"><i className="fas fa-edit"></i></button>
-                      <button className="btn-action btn-delete" title="Delete"><i className="fas fa-trash"></i></button>
+                      <button className="btn-action btn-edit" title="Edit">
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button className="btn-action btn-delete" title="Delete">
+                        <i className="fas fa-trash"></i>
+                      </button>
                     </td>
                   </tr>
-                  <tr>
-                    <td><img src="book2.jpg" alt="Book Cover" className="book-cover-small" /></td>
-                    <td>Atomic Habits</td>
-                    <td>James Clear</td>
-                    <td>Self-Help</td>
-                    <td><span className="status-badge status-active">Active</span></td>
-                    <td className="action-buttons">
-                      <button className="btn-action btn-edit" title="Edit"><i className="fas fa-edit"></i></button>
-                      <button className="btn-action btn-delete" title="Delete"><i className="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><img src="book3.jpg" alt="Book Cover" className="book-cover-small" /></td>
-                    <td>Project Hail Mary</td>
-                    <td>Andy Weir</td>
-                    <td>Sci-Fi</td>
-                    <td><span className="status-badge status-inactive">Inactive</span></td>
-                    <td className="action-buttons">
-                      <button className="btn-action btn-edit" title="Edit"><i className="fas fa-edit"></i></button>
-                      <button className="btn-action btn-delete" title="Delete"><i className="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
+                  {/* Add more rows as needed */}
                 </tbody>
               </table>
             </div>
@@ -262,7 +234,9 @@ const Admin = () => {
               <div className="modal-content">
                 <div className="modal-header">
                   <h3>Add New Book</h3>
-                  <button className="modal-close" onClick={closeModal}>&times;</button>
+                  <button className="modal-close" onClick={closeModal}>
+                    &times;
+                  </button>
                 </div>
                 <div className="modal-body">
                   <form className="book-form">
@@ -270,12 +244,12 @@ const Admin = () => {
                       <label htmlFor="bookTitle">Book Title</label>
                       <input type="text" id="bookTitle" className="form-control" required />
                     </div>
-                    
+
                     <div className="form-group">
                       <label htmlFor="bookAuthor">Author</label>
                       <input type="text" id="bookAuthor" className="form-control" required />
                     </div>
-                    
+
                     <div className="form-group">
                       <label htmlFor="bookCategory">Category</label>
                       <select id="bookCategory" className="form-control" required>
@@ -287,17 +261,17 @@ const Admin = () => {
                         <option value="sci-fi">Sci-Fi</option>
                       </select>
                     </div>
-                    
+
                     <div className="form-group">
                       <label htmlFor="bookDescription">Description</label>
                       <textarea id="bookDescription" className="form-control" rows="4"></textarea>
                     </div>
-                    
+
                     <div className="form-group">
                       <label htmlFor="bookCover">Cover Image</label>
                       <input type="file" id="bookCover" className="form-control" accept="image/*" />
                     </div>
-                    
+
                     <div className="form-group">
                       <label htmlFor="bookPrice">Price ($)</label>
                       <input type="number" id="bookPrice" className="form-control" step="0.01" min="0" />
