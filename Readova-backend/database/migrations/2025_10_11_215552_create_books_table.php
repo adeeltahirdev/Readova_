@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('categories')->nullable();
             $table->string('published_date')->nullable();
             $table->string('info_link')->nullable();
+            $table->string('price');
             $table->timestamps();
         });
     }

@@ -19,6 +19,5 @@ Route::get('/user', [LoginController::class, 'me']);
 Route::get('/books', [GoogleController::class, 'index']);
 Route::get('/showbooks', [GoogleController::class, 'show']);
 
-Route::get('/books/{id}', [GoogleController::class, 'detail']);
-
+Route::get('/books/{id}', [GoogleController::class, 'detail']);  
 Route::post('/subscribeplan', [UserPriceController::class, 'store']);

@@ -34,7 +34,6 @@ class GoogleController extends Controller
             })
             ->map(function ($item) {
                 $info = $item['volumeInfo'] ?? [];
-
                 return [
                     'google_id'     => $item['id'] ?? null,
                     'title'         => $info['title'] ?? 'No title',
@@ -54,7 +53,8 @@ class GoogleController extends Controller
                     [
                     'google_id' => $bookData['google_id'], 
                     'info_link' => $bookData['infoLink'],
-                    'published_date' => $bookData['publishedDate']
+                    'published_date' => $bookData['publishedDate'],
+                    'price' => number_format(mt_rand(1000, 5000) / 100, 2, '.', '')
                     ],
                     $bookData
                 );
@@ -72,8 +72,16 @@ class GoogleController extends Controller
         if (!$book) {
             return response()->json(['message' => 'Book not found'], 404);
         }
-        return response()->json(['book' => $book]);
+        // Ensure google_id exists; if not, you could set it to null or handle differently
+        $googleId = $book->google_id ?? null;
+        $previewLink = $googleId ? "https://books.google.com/books?id={$googleId}&printsec=frontcover" : null;
+        return response()->json([
+            'book' => $book,
+            'google_id' => $googleId,  // Keep this for the viewer
+            'google_preview_link' => $previewLink,  // Optional direct link
+        ]);
     }
+
 
     public function show(Request $request)
     {
@@ -96,7 +104,8 @@ class GoogleController extends Controller
                 'thumbnail',
                 'categories',
                 'published_date',
-                'info_link'
+                'info_link',
+                'price',
             ]);
         return response()->json([
             'total' => $books->count(),
