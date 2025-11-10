@@ -39,8 +39,6 @@ const Admin = () => {
     setIsLoggedIn(false);
     window.location.href = "/";
   };
-
-  // Check auth on mount
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("adminAuth");
     if (!isAuthenticated) {
@@ -50,7 +48,6 @@ const Admin = () => {
     }
   }, []);
 
-  // Fetch stats when logged in
   useEffect(() => {
     if (isLoggedIn) {
       fetchStats().finally(() => setLoadingStats(false));
@@ -102,10 +99,7 @@ const Admin = () => {
             </Link>
           </div>
         </aside>
-
-        {/* Main Content */}
         <main className="admin-main">
-          {/* Header */}
           <header className="admin-header">
             <div className="header-left">
               <h1 className="page-title">Admin Dashboard</h1>
@@ -228,7 +222,6 @@ const Admin = () => {
             </div>
           </section>
 
-          {/* Add Book Modal */}
           {isModalOpen && (
             <div className="modal admin-modal" id="addBookModal">
               <div className="modal-content">
@@ -285,8 +278,6 @@ const Admin = () => {
               </div>
             </div>
           )}
-
-          {/* Quick Actions */}
           <section className="quick-actions">
             <h2 className="section-title">Quick Actions</h2>
             <div className="actions-grid">

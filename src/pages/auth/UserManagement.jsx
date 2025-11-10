@@ -24,8 +24,6 @@ const UserManagement = () => {
       fetchUsers();
     }
   }, []);
-
-  // 🔹 Fetch all users
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -37,8 +35,6 @@ const UserManagement = () => {
     }
     setLoading(false);
   };
-
-  // 🔹 Create new user
   const handleCreateUser = async (e) => {
     e.preventDefault();
     if (!newUser.name || !newUser.email || !newUser.password) {
@@ -57,7 +53,6 @@ const UserManagement = () => {
     }
   };
 
-  // 🔹 Delete user
   const handleDeleteUser = async (email) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
@@ -70,7 +65,6 @@ const UserManagement = () => {
     }
   };
 
-  // 🔹 Search user by email or name
   const filteredUsers = users.filter(
     (u) =>
       u.name?.toLowerCase().includes(query.toLowerCase()) ||
@@ -89,7 +83,6 @@ const UserManagement = () => {
   return (
     <AdminLayout>
       <div className="admin-container">
-        {/* Sidebar */}
         <aside className="admin-sidebar">
           <div className="sidebar-header">
             <h2 className="admin-logo">Readova Admin</h2>
@@ -130,7 +123,6 @@ const UserManagement = () => {
           </div>
         </aside>
 
-        {/* Main Content */}
         <main className="admin-main">
           <header className="admin-header">
             <div className="header-left">
@@ -146,7 +138,6 @@ const UserManagement = () => {
             </div>
           </header>
 
-          {/* User Section */}
           <section className="management-section">
             <div className="section-header">
               <h2 className="section-title">All Users</h2>
@@ -155,7 +146,6 @@ const UserManagement = () => {
               </button>
             </div>
 
-            {/* Search Bar */}
             <div className="search-bar">
               <input
                 type="text"
@@ -201,7 +191,6 @@ const UserManagement = () => {
             )}
           </section>
 
-          {/* Add User Modal */}
           {isModalOpen && (
             <div className="modal admin-modal">
               <div className="modal-content">
