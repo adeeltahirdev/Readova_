@@ -9,6 +9,8 @@ import BookDetail from "./pages/BookDetail";
 import Pricing from "./pages/Pricing";
 import Preview from "./pages/PreviewBook";
 import Admin from "./pages/auth/Admin";
+import Books from "./pages/auth/BooksManagement";
+import User from "./pages/auth/UserManagement";
 import PrivateRoute from "./components/common/PrivateRoute";
 
 const Router = () => {
@@ -75,6 +77,22 @@ const Router = () => {
         element={
           <PrivateRoute adminOnly={true}>
             <Admin />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <PrivateRoute adminOnly={true}>
+            <User />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/books"
+        element={
+          <PrivateRoute adminOnly={true}>
+            <Books />
           </PrivateRoute>
         }
       />

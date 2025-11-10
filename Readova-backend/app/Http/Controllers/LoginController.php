@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
+    public function index()
+    {
+        $users = User::all();
+        return response()->json(['users' => $users]);
+    }
     public function create(Request $request)
     {
         $validated = $request->validate([
@@ -43,26 +48,22 @@ class LoginController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-        return response()->json(['message' => 'Login successful', 'user' => $user]);
+        return response()->json(['message' => 'Login successful', 'user' => $user, 'is_admin' => $user->is_admin]);
     }
 
-  public function me(Request $request)
-{
-    // Validate that email is provided
-    $request->validate([
-        'email' => 'required|email',
-    ]);
-
-    // Find the user by email or fail
-    $user = User::where('email', $request->email)->firstOrFail();
-
-    return response()->json([
-        'id' => $user->id,
-        'name' => $user->name,
-        'email' => $user->email,
-        'is_admin' => $user->is_admin,
-    ]);
-}
+    public function me(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        $user = User::where('email', $request->email)->firstOrFail();
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'is_admin' => $user->is_admin,
+        ]);
+    }
 
 
     public function destroy(Request $request)
