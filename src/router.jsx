@@ -7,6 +7,7 @@ import BorrowCheckout from "./pages/BorrowCheckout";
 import SubscribedCheckout from "./pages/SubscribedCheckout";
 import BookDetail from "./pages/BookDetail";
 import Pricing from "./pages/Pricing";
+import Preview from "./pages/PreviewBook";
 import Admin from "./pages/auth/Admin";
 import PrivateRoute from "./components/common/PrivateRoute";
 
@@ -17,6 +18,7 @@ const Router = () => {
       <Route index path="/" element={<IndexPage />} />
       <Route path="/browse" element={<BrowsePage />} />
       <Route path="/book/:id" element={<BookDetail />} />
+      <Route path="/preview/:id" element={<Preview />} />
       <Route
         path="/auth/register"
         element={

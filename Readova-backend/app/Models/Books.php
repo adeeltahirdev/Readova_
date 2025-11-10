@@ -15,5 +15,6 @@ class Books extends Model
         'categories',
         'published_date',
         'info_link',
+        'price'
     ];
 }

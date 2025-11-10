@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import api from "../../api/axios";
+import { Link } from "react-router";
 import { toast } from "react-toastify";
 const BookDetail = () => {
   const { id } = useParams();
@@ -107,12 +108,20 @@ const BookDetail = () => {
               <p className="book-author">By {book.authors}</p>
 
               <div className="book-actions">
-                <a href="#" className="btn btn-full"  onClick={() => navigate('/borrowcheckout')}>
+                <a
+                  href="#"
+                  className="btn btn-full"
+                  onClick={() => navigate("/borrowcheckout")}>
                   Borrow
                 </a>
                 <a href="/pricing" className="btn btn-outline subscribe-btn">
                   Subscribe
                 </a>
+                <Link
+                  to={`/preview/${book.id}`}
+                  className="btn btn-outline subscribe-btn">
+                  Preview
+                </Link>
               </div>
 
               <div className="book-description">{renderDescription()}</div>
@@ -147,8 +156,7 @@ const BookDetail = () => {
                     onClick={() => navigate(`/book/${simBook.id}`)}
                     style={{
                       cursor: "pointer",
-                    }}
-                  >
+                    }}>
                     <img
                       src={
                         simBook.thumbnail ||
