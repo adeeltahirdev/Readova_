@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import "../../assets/css/Admin.css";
 import "../../assets/css/login.css";
 import axios from "../../../api/axios.js";
-import { toast } from "react-toastify"; // ✅ Import Toastify
+import { toast } from "react-toastify";
 
 const BooksManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -247,8 +247,6 @@ const BooksManagement = () => {
               </>
             )}
           </section>
-
-          {/* Add Book Modal */}
           {isModalOpen && (
             <div className="modal admin-modal">
               <div className="modal-content">

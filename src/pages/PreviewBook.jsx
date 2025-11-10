@@ -107,10 +107,9 @@ const PreviewBook = () => {
 
   return (
     <div className="preview-container">
-      {/* ==== HEADER ==== */}
       <header className="preview-header">
         <div className="header-left">
-          <img src={Logo} alt="Logo" className="logo" /> {/* ✅ logo added */}
+          <img src={Logo} alt="Logo" className="logo" />
 
           <button
             onClick={() => navigate(-1)}
@@ -147,7 +146,6 @@ const PreviewBook = () => {
         </div>
       </header>
 
-      {/* ==== FULL PAGE PREVIEW AREA ==== */}
       <section className="preview-fullpage">
         {hasGooglePreview ? (
           <iframe
