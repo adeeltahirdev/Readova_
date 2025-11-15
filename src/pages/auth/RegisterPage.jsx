@@ -90,7 +90,7 @@ const RegisterPage = () => {
                   onChange={(e) => setLoginEmail(e.target.value)}
                   required
                 />{" "}
-                <MdPerson2 className="icon" />{" "}
+                <MdPerson2 className="icon_" />{" "}
               </div>{" "}
               <div className="input-box">
                 <input
@@ -100,7 +100,7 @@ const RegisterPage = () => {
                   onChange={(e) => setLoginPassword(e.target.value)}
                   required
                 />{" "}
-                <MdLock className="icon" />{" "}
+                <MdLock className="icon_" />{" "}
               </div>{" "}
               <div className="forgot-link">
                 {" "}
@@ -123,7 +123,7 @@ const RegisterPage = () => {
                   onChange={(e) => setSignupName(e.target.value)}
                   required
                 />
-                <MdPerson2 className="icon" />
+                <MdPerson2 className="icon_" />
               </div>
               <div className="input-box">
                 <input
@@ -133,7 +133,7 @@ const RegisterPage = () => {
                   onChange={(e) => setSignupEmail(e.target.value)}
                   required
                 />
-                <MdEmail className="icon" />
+                <MdEmail className="icon_" />
               </div>
               <div className="input-box">
                 <input
@@ -143,7 +143,7 @@ const RegisterPage = () => {
                   onChange={(e) => setSignupPassword(e.target.value)}
                   required
                 />
-                <MdLock className="icon" />
+                <MdLock className="icon_" />
               </div>
               <button type="submit" className="auth-btn">
                 Sign up

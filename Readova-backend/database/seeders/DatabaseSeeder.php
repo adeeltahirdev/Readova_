@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             'password' => '$2y$12$25htsejEzu7zG4sCzWiD0u6RD5HE1PcpqUKMY/yCKTG4nd7y6VPJa',
             'is_admin' => true,
         ]);
+        //admin@readova
         $this->call([
             TypeSeeder::class,
         ]);

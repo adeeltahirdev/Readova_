@@ -1,22 +1,10 @@
 /* ************* */
-/* Header */
-/* ************* */
-/* .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #001f59;
-  height: 9.6rem;
-  padding: 0 4.8rem;
-} */
-
-/* ************* */
 /* Navigation */
 /* ************* */
 
-/* ===================== */
+
 /* User Dropdown */
-/* ===================== */
+
 
 .user-dropdown-container {
   position: relative;
@@ -1147,11 +1135,11 @@ label input[type="checkbox"] {
     margin-bottom: 3rem;
 }
 
-/* Center the button and add space above */
+
 .plan-card .btn {
-    margin-top: 3rem; /* Added space above the button */
-    align-self: center; /* Center the button horizontally */
-    width: 80%; /* Make button a bit narrower for better appearance */
+    margin-top: 3rem; 
+    align-self: center; 
+    width: 80%;
     text-align: center;
 }
 
