@@ -11,122 +11,8 @@ html {
 
 body {
   min-height: 100vh;
-  /* background-image: url("../img/body-bg.jpg"); */
-  /* background-size: cover; */
 }
 
-/* .acc {
-  text-decoration: none;
-}
-
-.log-icon {
-  display: flex;
-  align-items: center;
-  color: #ffffff;
-  font-size: 2.2rem;
-  /* text-decoration: none; */
-/* transition: all 0.2s;
-} */
-
-/* .log-icon:hover {
-  color: #66799b;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 6.4rem;
-  padding: 0 4.8rem;
-  background-color: #001f59;
-  color: #ffffff;
-
-  /* height: 6.4rem;
-  padding: 0 4.8rem;
-  position: relative; */
-
-/*
-.logo {
-  height: 3rem;
-}
-
-/* Left Side */
-/* .navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 4.8rem;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 2rem;
-}
-
-.nav-links a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.nav-links:link,
-.nav-links:visited {
-  display: inline-block;
-  text-decoration: none;
-  color: #fff;
-  font-weight: 500;
-  font-size: 1.8rem;
-  transition: all 0.3s;
-}
-
-.nav-links:hover,
-.nav-links:active {
-  color: #66799b;
-}
-
-.drop-links:link,
-.drop-links:visited {
-  display: inline-block;
-  text-decoration: none;
-  color: #fff;
-  font-weight: 500;
-  font-size: 1.8rem;
-  transition: all 0.3s;
-}
-
-.drop-links:hover,
-.drop-links:active {
-  color: #99a5bd;
-}
-
-.drop-menu {
-  display: none;
-  position: absolute;
-  background-color: #1a356a; */
-/* color: #1a356a; */
-/* line-height: 2;
-  list-style: none;
-  border-radius: 9px;
-  padding: 2rem 2rem;
-}
-
-.genre-dropdown:hover .drop-menu {
-  display: block;
-  z-index: 999;
-} */
-
-/* Right Side */
-/* .navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 2.4rem;
-}
-
-.search-bar {
-  padding: 5px 10px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 25px;
-} */
 .wrap {
   display: flex;
   justify-content: center;
@@ -202,7 +88,7 @@ form {
   font-weight: 400;
 }
 
-.icon {
+.icon_ {
   position: absolute;
   right: 20px;
   top: 50%;

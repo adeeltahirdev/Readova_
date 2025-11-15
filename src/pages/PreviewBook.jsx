@@ -8,6 +8,8 @@ import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
   BookOpenIcon,
+  BookmarkIcon,
+  StarIcon,
 } from "@heroicons/react/24/outline";
 import Logo from "../../src/assets/images/Logo.png";
 import "../../src/assets/css/preview.css";
@@ -19,8 +21,13 @@ const PreviewBook = () => {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const [rating, setRating] = useState(0); // New
+  const [savedPage, setSavedPage] = useState(null); // New
+
   const iframeRef = useRef(null);
 
+  /* ======================== LOAD BOOK ======================== */
   useEffect(() => {
     const fetchBook = async () => {
       try {
@@ -32,7 +39,6 @@ const PreviewBook = () => {
           navigate(-1);
         }
       } catch (err) {
-        console.error(err);
         toast.error(err.response?.data?.message || "Failed to load book");
         navigate(-1);
       } finally {
@@ -43,6 +49,16 @@ const PreviewBook = () => {
     if (id) fetchBook();
   }, [id, navigate]);
 
+  /* ======================== LOAD LOCAL BOOKMARK & RATING ======================== */
+  useEffect(() => {
+    const saved = localStorage.getItem(`bookmark_${id}`);
+    if (saved) setSavedPage(Number(saved));
+
+    const storedRating = localStorage.getItem(`rating_${id}`);
+    if (storedRating) setRating(Number(storedRating));
+  }, [id]);
+
+  /* ======================== TOGGLE FULLSCREEN ======================== */
   const toggleFullscreen = async () => {
     try {
       if (!document.fullscreenElement) {
@@ -57,6 +73,7 @@ const PreviewBook = () => {
     }
   };
 
+  /* ======================== SHARE ======================== */
   const shareBook = async () => {
     if (!book) return;
 
@@ -82,6 +99,35 @@ const PreviewBook = () => {
     }
   };
 
+  /* ======================== BOOKMARK (LOCAL, GENERIC) ======================== */
+  const saveBookmark = () => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    iframe.contentWindow.postMessage({ type: "GET_PAGE" }, "*");
+
+    window.addEventListener(
+      "message",
+      (event) => {
+        if (event.data?.type === "CURRENT_PAGE") {
+          const page = event.data.page;
+          localStorage.setItem(`bookmark_${id}`, page);
+          setSavedPage(page);
+          toast.success(`Bookmarked page ${page}`);
+        }
+      },
+      { once: true }
+    );
+  };
+
+  /* ======================== STAR RATING (LOCAL, GENERIC) ======================== */
+  const handleRating = (value) => {
+    setRating(value);
+    localStorage.setItem(`rating_${id}`, value);
+    toast.success(`You rated this book ${value} stars`);
+  };
+
+  /* ======================== RENDER ======================== */
   if (loading) {
     return (
       <div className="preview-loading">
@@ -111,11 +157,7 @@ const PreviewBook = () => {
         <div className="header-left">
           <img src={Logo} alt="Logo" className="logo" />
 
-          <button
-            onClick={() => navigate(-1)}
-            className="icon-btn"
-            aria-label="Back"
-          >
+          <button onClick={() => navigate(-1)} className="icon-btn">
             <ArrowLeftIcon className="icon" />
           </button>
 
@@ -126,12 +168,24 @@ const PreviewBook = () => {
         </div>
 
         <div className="header-right">
+          {/* ⭐ STAR RATING */}
+          {[1, 2, 3, 4, 5].map((s) => (
+            <StarIcon
+              key={s}
+              onClick={() => handleRating(s)}
+              className="icon"
+              style={{ color: s <= rating ? "yellow" : "white", cursor: "pointer" }}
+            />
+          ))}
+
+          {/* 🔖 BOOKMARK */}
+          <button onClick={saveBookmark} className="icon-btn" title="Bookmark page">
+            <BookmarkIcon className="icon" />
+          </button>
+
+          {/* FULLSCREEN */}
           {hasGooglePreview && (
-            <button
-              onClick={toggleFullscreen}
-              className="icon-btn"
-              aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-            >
+            <button onClick={toggleFullscreen} className="icon-btn">
               {isFullscreen ? (
                 <ArrowsPointingInIcon className="icon" />
               ) : (
@@ -139,10 +193,6 @@ const PreviewBook = () => {
               )}
             </button>
           )}
-
-          <button onClick={shareBook} className="icon-btn" aria-label="Share">
-            <ShareIcon className="icon" />
-          </button>
         </div>
       </header>
 
@@ -159,11 +209,7 @@ const PreviewBook = () => {
         ) : (
           <div className="preview-fallback">
             {book.cover_url ? (
-              <img
-                src={book.cover_url}
-                alt={`${book.title} cover`}
-                className="fallback-cover"
-              />
+              <img src={book.cover_url} alt={`${book.title} cover`} className="fallback-cover" />
             ) : (
               <div className="fallback-icon-wrap">
                 <BookOpenIcon className="fallback-icon" />
@@ -175,9 +221,7 @@ const PreviewBook = () => {
             {book.description ? (
               <p className="fallback-description">{book.description}</p>
             ) : (
-              <p className="fallback-description italic">
-                No description available.
-              </p>
+              <p className="fallback-description italic">No description available.</p>
             )}
           </div>
         )}
