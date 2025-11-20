@@ -785,6 +785,10 @@ label input[type="checkbox"] {
   margin-bottom: 20px;
 }
 
+/* ******************* */
+/* Sort Options Dropdown Styling */
+/* ******************* */
+
 .sort-options {
   display: flex;
   align-items: center;
@@ -800,7 +804,7 @@ label input[type="checkbox"] {
 }
 
 #sort-by {
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 3rem 0.8rem 1.2rem;
   border: 2px solid #e1e5e9;
   border-radius: 8px;
   background-color: white;
@@ -809,30 +813,43 @@ label input[type="checkbox"] {
   color: #555;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 180px;
+  min-width: 200px;
   appearance: none;
   background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23001f59' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 0.8rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 #sort-by:hover {
   border-color: #001f59;
-  box-shadow: 0 2px 8px rgba(0, 31, 89, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 31, 89, 0.15);
+  transform: translateY(-1px);
 }
 
 #sort-by:focus {
   outline: none;
   border-color: #001f59;
   box-shadow: 0 0 0 3px rgba(0, 31, 89, 0.1);
+  background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23001c50' d='M2 5L0 3h4zm0-5L0 2h4z'/></svg>");
 }
 
 #sort-by option {
-  padding: 0.8rem;
+  padding: 1rem;
   font-size: 1.4rem;
   background-color: white;
   color: #555;
+  border: none;
+}
+
+#sort-by option:hover {
+  background-color: #f0f4ff;
+}
+
+#sort-by option:checked {
+  background-color: #001f59;
+  color: white;
 }
 
 /* For the browse page listing header */
@@ -841,14 +858,60 @@ label input[type="checkbox"] {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 3rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid #e1e5e9;
+  padding: 2rem 0;
+  border-bottom: 2px solid #f0f4ff;
 }
 
 .listing-header h2 {
   color: #001f59;
   font-size: 2.4rem;
   margin: 0;
+  font-weight: 700;
+}
+
+/* Custom select wrapper for better control */
+.sort-select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.sort-select-wrapper::after {
+  content: "▾";
+  font-size: 1.4rem;
+  color: #001f59;
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-weight: bold;
+}
+
+/* If you want to use a custom class instead of ID */
+.sort-select {
+  padding: 0.8rem 3rem 0.8rem 1.2rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 1.4rem;
+  font-family: "Open Sans", sans-serif;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+  appearance: none;
+  background-image: none;
+}
+
+.sort-select:hover {
+  border-color: #001f59;
+  box-shadow: 0 2px 8px rgba(0, 31, 89, 0.15);
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: #001f59;
+  box-shadow: 0 0 0 3px rgba(0, 31, 89, 0.1);
 }
 
 /* Responsive design for sort options */
@@ -864,10 +927,15 @@ label input[type="checkbox"] {
     justify-content: space-between;
   }
   
-  #sort-by {
+  #sort-by,
+  .sort-select {
     min-width: 150px;
     flex: 1;
     margin-left: 1rem;
+  }
+  
+  .sort-label {
+    font-size: 1.4rem;
   }
 }
 
@@ -876,11 +944,14 @@ label input[type="checkbox"] {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.8rem;
+    width: 100%;
   }
   
-  #sort-by {
+  #sort-by,
+  .sort-select {
     margin-left: 0;
     width: 100%;
+    min-width: auto;
   }
 }
 
