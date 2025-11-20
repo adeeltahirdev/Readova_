@@ -2,9 +2,7 @@
 /* Navigation */
 /* ************* */
 
-
 /* User Dropdown */
-
 
 .user-dropdown-container {
   position: relative;
@@ -30,7 +28,7 @@
   color: #fff;
   border-radius: 8px;
   width: 180px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 999;
   padding: 1rem 0;
 }
@@ -122,7 +120,6 @@
     transform: translateY(0);
   }
 }
-
 
 /* Notification Dropdown Container */
 .notification-container {
@@ -424,7 +421,108 @@
 
 .scroll-btn:hover {
   color: #1d4ed8;
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
+}
+
+/* *********************** */
+/* Scrolling Animation */
+/* *********************** */
+
+/* *********************** */
+/* Fixed Scrolling Styles - 3 Books Visible with Smooth Animation */
+/* *********************** */
+
+.scroll-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 6rem; /* Space for arrows */
+  overflow: hidden; /* Hide overflow from wrapper */
+}
+
+.scroll-container {
+  display: flex;
+  transition: transform 0.5s ease-in-out; /* Smooth slide animation */
+  padding: 2rem 0;
+  width: 300%; /* 3 sets of 3 books */
+}
+
+/* Each slide takes exactly 1/3 of the total container width (so 100% of viewport) */
+.scroll-slide {
+  display: flex;
+  gap: 2rem;
+  width: 33.333%; /* Each slide takes 1/3 of the 300% container = 100% viewport */
+  flex-shrink: 0;
+}
+
+/* Each book card takes exactly 1/3 of the slide width minus gaps */
+.scroll-slide .hm-books {
+  flex: 1; /* Each book takes equal space within the slide */
+  min-width: 0; /* Allow shrinking if needed */
+  transition: transform 0.3s ease; /* Keep the hover animation */
+}
+
+/* Ensure the original hm-books styles work correctly */
+.scroll-slide .hm-books {
+  box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.3);
+  border-radius: 11px;
+  padding: 1.6rem;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.scroll-slide .hm-books:hover {
+  transform: scale(1.05); /* Slightly reduced hover effect */
+  box-shadow: 0 3.2rem 6.4rem rgba(0, 0, 0, 0.6);
+}
+
+/* Scroll button positioning */
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 2.4rem;
+  color: #1a356a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+  background: white;
+  color: #1d4ed8;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-btn:first-of-type {
+  left: 1rem;
+}
+
+.scroll-btn:last-of-type {
+  right: 1rem;
+}
+
+/* Disable scroll buttons when at ends */
+.scroll-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: translateY(-50%) scale(1);
+}
+
+.scroll-btn.disabled:hover {
+  transform: translateY(-50%) scale(1);
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a356a;
 }
 
 /* *********************** */
@@ -625,7 +723,7 @@ hr {
 /* Filters Sidebar */
 .filters {
   width: 250px;
-  height: 600px;
+  height: 500px;
   padding: 20px;
   background: #f4f4f4;
   border-radius: 10px;
@@ -690,16 +788,100 @@ label input[type="checkbox"] {
 .sort-options {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.sort-label {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #001f59;
+  white-space: nowrap;
 }
 
 #sort-by {
-  padding: 5px;
-  border-radius: 5px;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 1.4rem;
+  font-family: "Open Sans", sans-serif;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23001f59' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 0.8rem;
 }
 
 #sort-by:hover {
-  cursor: pointer;
+  border-color: #001f59;
+  box-shadow: 0 2px 8px rgba(0, 31, 89, 0.1);
+}
+
+#sort-by:focus {
+  outline: none;
+  border-color: #001f59;
+  box-shadow: 0 0 0 3px rgba(0, 31, 89, 0.1);
+}
+
+#sort-by option {
+  padding: 0.8rem;
+  font-size: 1.4rem;
+  background-color: white;
+  color: #555;
+}
+
+/* For the browse page listing header */
+.listing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.listing-header h2 {
+  color: #001f59;
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+/* Responsive design for sort options */
+@media (max-width: 768px) {
+  .listing-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  
+  .sort-options {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  #sort-by {
+    min-width: 150px;
+    flex: 1;
+    margin-left: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sort-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+  
+  #sort-by {
+    margin-left: 0;
+    width: 100%;
+  }
 }
 
 /* Book Grid */
@@ -1065,276 +1247,271 @@ label input[type="checkbox"] {
   }
 }
 
-
 /* ******************* */
-/* Pricing  */  
+/* Pricing  */
 /* ****************** */
 
 /* Subscription Page Styles */
 .plans-container {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    flex-wrap: wrap;
-    margin-bottom: 5rem;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-bottom: 5rem;
 }
 
 .plan-card {
-    background: white;
-    border-radius: 10px;
-    padding: 3rem 2.5rem;
-    width: 100%;
-    max-width: 450px;
-    box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+  background: white;
+  border-radius: 10px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .plan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 3.2rem 6.4rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 3.2rem 6.4rem rgba(0, 0, 0, 0.15);
 }
 
 .plan-card.popular {
-    border: 2px solid #001f59;
+  border: 2px solid #001f59;
 }
 
-
 .popular-badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #001f59;
-    color: white;
-    padding: 0.7rem 1.8rem;
-    font-size: 1.4rem;
-    font-weight: 600;
-    border-bottom-left-radius: 11px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #001f59;
+  color: white;
+  padding: 0.7rem 1.8rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  border-bottom-left-radius: 11px;
 }
 
 .plan-description {
-    font-size: 1.6rem;
-    color: #6c757d;
-    margin-bottom: 2rem;
-    line-height: 1.5;
+  font-size: 1.6rem;
+  color: #6c757d;
+  margin-bottom: 2rem;
+  line-height: 1.5;
 }
 
 .price-large {
-    font-size: 4.2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #001f59;
+  font-size: 4.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #001f59;
 }
 
 .price-period {
-    font-size: 1.6rem;
-    color: #6c757d;
-    margin-bottom: 3rem;
+  font-size: 1.6rem;
+  color: #6c757d;
+  margin-bottom: 3rem;
 }
 
-
 .plan-card .btn {
-    margin-top: 3rem; 
-    align-self: center; 
-    width: 80%;
-    text-align: center;
+  margin-top: 3rem;
+  align-self: center;
+  width: 80%;
+  text-align: center;
 }
 
 .faq-section {
-    max-width: 800px;
-    margin: 0 auto;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .faq-item {
-    margin-bottom: 1.5rem;
-    border-radius: 11px;
-    overflow: hidden;
-    box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+  border-radius: 11px;
+  overflow: hidden;
+  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.08);
 }
 
 .faq-question {
-    padding: 1.8rem;
-    background: white;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.8rem;
-    color: #001f59;
+  padding: 1.8rem;
+  background: white;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.8rem;
+  color: #001f59;
 }
 
 .faq-answer {
-    padding: 0 1.8rem;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    background: white;
-    font-size: 1.6rem;
-    line-height: 1.6;
+  padding: 0 1.8rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: white;
+  font-size: 1.6rem;
+  line-height: 1.6;
 }
 
 .faq-answer.active {
-    padding: 0 1.8rem 1.8rem;
-    max-height: 500px;
+  padding: 0 1.8rem 1.8rem;
+  max-height: 500px;
 }
 
 /* ******************* */
 
 /* Book Detail Page Styles */
 .book-header {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 4rem;
-    margin-bottom: 4rem;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  align-items: start;
 }
 
 .book-cover-large {
-    width: 100%;
-    border-radius: 11px;
-    box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.2);
+  width: 100%;
+  border-radius: 11px;
+  box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.2);
 }
 
 .book-info-main {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .book-authors {
-    font-size: 1.8rem;
-    color: #6c757d;
-    line-height: 1.4;
+  font-size: 1.8rem;
+  color: #6c757d;
+  line-height: 1.4;
 }
 
 .book-actions {
-    display: flex;
-    gap: 2rem;
-    margin: 2rem 0;
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
 }
 
-
 .book-description {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 .book-description p {
-    font-size: 1.6rem;
-    line-height: 1.6;
-    color: #555;
-    margin-bottom: 1rem;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 1rem;
 }
 
 .read-more {
-    font-size: 1.4rem;
+  font-size: 1.4rem;
 }
 
 /* Stats Section */
 .book-stats {
-    display: flex;
-    justify-content: space-around;
-    background: #f8f9fa;
-    padding: 3rem 2rem;
-    border-radius: 11px;
-    margin: 4rem 0;
-    border: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-around;
+  background: #f8f9fa;
+  padding: 3rem 2rem;
+  border-radius: 11px;
+  margin: 4rem 0;
+  border: 1px solid #e9ecef;
 }
 
 .stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .stat-number {
-    font-size: 2.4rem;
-    font-weight: 700;
-    color: #001f59;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #001f59;
 }
 
 .stat-label {
-    font-size: 1.4rem;
-    color: #6c757d;
-    font-weight: 500;
+  font-size: 1.4rem;
+  color: #6c757d;
+  font-weight: 500;
 }
 
 /* Similar Books Section */
 .similar-books {
-    margin: 6rem 0 4rem 0;
+  margin: 6rem 0 4rem 0;
 }
 
 .similar-books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 .similar-book-card {
-    text-align: center;
-    transition: all 0.3s;
-    cursor: pointer;
+  text-align: center;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 
 .similar-book-card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .similar-book-cover {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.1);
 }
 
 .similar-book-title {
-    font-size: 1.6rem;
-    margin-top: 1rem;
-    color: #001f59;
-    font-weight: 600;
+  font-size: 1.6rem;
+  margin-top: 1rem;
+  color: #001f59;
+  font-weight: 600;
 }
 
 /* Chapters Section */
 .chapters-section {
-    margin: 6rem 0;
+  margin: 6rem 0;
 }
 
 .chapters-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .chapter-item {
-    background: white;
-    padding: 1.5rem 2rem;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-align: center;
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
 }
 
 .chapter-item:hover {
-    background: #f8f9fa;
-    border-color: #001f59;
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 31, 89, 0.1);
+  background: #f8f9fa;
+  border-color: #001f59;
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 31, 89, 0.1);
 }
 
 .chapter-number {
-    font-size: 1.6rem;
-    color: #001f59;
-    font-weight: 500;
+  font-size: 1.6rem;
+  color: #001f59;
+  font-weight: 500;
 }
-
 
 /* Mobile Navigation */
 .btn-mobile-nav {
@@ -1531,7 +1708,6 @@ body.nav-open .btn-mobile-nav .close-icon {
   }
 }
 
-
 /* ============================ */
 /* MEDIA QUERIES */
 /* ============================ */
@@ -1549,16 +1725,16 @@ body.nav-open .btn-mobile-nav .close-icon {
     gap: 6.4rem;
     padding: 0 4.8rem;
   }
-  
+
   .grid--footer {
     grid-template-columns: 1fr 1fr 1fr;
     row-gap: 4.8rem;
   }
-  
+
   .browse-container {
     flex-direction: column;
   }
-  
+
   .filters {
     width: 100%;
     height: auto;
@@ -1571,58 +1747,58 @@ body.nav-open .btn-mobile-nav .close-icon {
   html {
     font-size: 56.25%;
   }
-  
+
   .heading-primary {
     font-size: 4.4rem;
   }
-  
+
   .heading-secondary {
     font-size: 2.6rem;
   }
-  
+
   .hero {
     grid-template-columns: 1fr;
     text-align: center;
     gap: 4.8rem;
   }
-  
+
   .hero-img {
     margin-top: 0;
     width: 80%;
     justify-self: center;
   }
-  
+
   .community {
     justify-content: center;
   }
-  
+
   .navbar {
     padding: 0 3.2rem;
   }
-  
+
   .navbar-left {
     gap: 3.2rem;
   }
-  
+
   .nav-links {
     gap: 1.6rem;
   }
-  
+
   .grid-2-col,
   .grid-3-col {
     grid-template-columns: 1fr;
     gap: 4.8rem;
   }
-  
+
   .book-header {
     grid-template-columns: 250px 1fr;
     gap: 3rem;
   }
-  
+
   .checkout-container {
     flex-direction: column;
   }
-  
+
   .checkout-right {
     max-width: 100%;
   }
@@ -1633,94 +1809,94 @@ body.nav-open .btn-mobile-nav .close-icon {
   html {
     font-size: 50%;
   }
-  
+
   .container {
     padding: 0 2.4rem;
   }
-  
+
   .navbar {
     padding: 0 2.4rem;
     height: 5.6rem;
   }
-  
+
   .navbar-left {
     gap: 2.4rem;
   }
-  
+
   .nav-links {
     display: none;
   }
-  
+
   .btn-mobile-nav {
     display: block;
   }
-  
+
   .heading-primary {
     font-size: 3.6rem;
   }
-  
+
   .heading-secondary {
     font-size: 2.2rem;
   }
-  
+
   .section-hero {
     padding: 3.2rem 0 6.4rem 0;
   }
-  
+
   .popular,
   .recommended,
   .new-arrivals {
     padding: 6.4rem 0;
   }
-  
+
   .hero {
     padding: 0 2.4rem;
   }
-  
+
   .footer {
     padding: 6.4rem 0 1rem 0;
   }
-  
+
   .grid--footer {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .book-header {
     grid-template-columns: 1fr;
     text-align: center;
   }
-  
+
   .book-actions {
     justify-content: center;
     flex-wrap: wrap;
   }
-  
+
   .book-stats {
     flex-wrap: wrap;
     gap: 2rem;
   }
-  
+
   .stat-item {
     flex: 1;
     min-width: 120px;
   }
-  
+
   .similar-books-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .chapters-list {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
-  
+
   .plans-container {
     gap: 2rem;
   }
-  
+
   .plan-card {
     padding: 2.4rem 2rem;
   }
-  
+
   .plan-card .btn {
     width: 90%;
   }
@@ -1731,101 +1907,101 @@ body.nav-open .btn-mobile-nav .close-icon {
   .container {
     padding: 0 1.6rem;
   }
-  
+
   .navbar {
     padding: 0 1.6rem;
   }
-  
+
   .navbar-right {
     gap: 1.6rem;
   }
-  
+
   .search-bar {
     width: 120px;
   }
-  
+
   .heading-primary {
     font-size: 3rem;
     margin-top: 2.4rem;
     margin-bottom: 2.4rem;
   }
-  
+
   .heading-secondary {
     font-size: 2rem;
   }
-  
+
   .btn,
   .btn:link,
   .btn:visited {
     font-size: 1.8rem;
     padding: 1.2rem 2.4rem;
   }
-  
+
   .hero-description {
     font-size: 1.8rem;
   }
-  
+
   .community {
     flex-direction: column;
     gap: 1.2rem;
     margin-top: 4.8rem;
   }
-  
+
   .grid--footer {
     grid-template-columns: 1fr;
     text-align: center;
   }
-  
+
   .logo-col {
     align-items: center;
   }
-  
+
   .social-links {
     justify-content: center;
   }
-  
+
   .b-book-grid,
   .hm-grid {
     grid-template-columns: 1fr;
     gap: 3.2rem;
   }
-  
+
   .stats-overview {
     flex-direction: column;
   }
-  
+
   .book-actions {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .borrow-btn,
   .subscribe-btn {
     width: 100%;
     max-width: 250px;
   }
-  
+
   .similar-books-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .chapters-list {
     grid-template-columns: 1fr;
   }
-  
+
   .faq-question {
     padding: 1.4rem;
     font-size: 1.6rem;
   }
-  
+
   .faq-answer {
     font-size: 1.4rem;
   }
-  
+
   .price-large {
     font-size: 3.6rem;
   }
-  
+
   .plan-description {
     font-size: 1.4rem;
   }
@@ -1836,34 +2012,34 @@ body.nav-open .btn-mobile-nav .close-icon {
   .container {
     padding: 0 1.2rem;
   }
-  
+
   .navbar {
     padding: 0 1.2rem;
   }
-  
+
   .heading-primary {
     font-size: 2.6rem;
   }
-  
+
   .heading-secondary {
     font-size: 1.8rem;
   }
-  
+
   .btn,
   .btn:link,
   .btn:visited {
     font-size: 1.6rem;
     padding: 1rem 2rem;
   }
-  
+
   .book-stats {
     padding: 2rem 1rem;
   }
-  
+
   .stat-number {
     font-size: 2rem;
   }
-  
+
   .plan-card {
     padding: 2rem 1.6rem;
   }
