@@ -214,7 +214,7 @@ const BrowsePage = () => {
             </label>
           </div>
 
-          <div className="filter-group">
+          {/* <div className="filter-group">
             <h4>Availability</h4>
             <label>
               <input
@@ -234,7 +234,7 @@ const BrowsePage = () => {
               />
               Pre-Order
             </label>
-          </div>
+          </div> */}
 
           <button className="btn-apply" onClick={handleApplyFilters}>
             Apply Filters
