@@ -14,62 +14,63 @@ const BrowsePage = () => {
     price: [],
     availability: [],
   });
+  const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 12;
 
   useEffect(() => {
-  const fetchBooks = async () => {
-    try {
-      const res = await api.get("/showbooks");
-      const apiBooks = (res.data.books || []).map((book) => ({
-        id: book.id,
-        title: book.title,
-        author: book.authors,
-        rating: book.rating || "",
-        categories: book.categories || "Unknown",
-        price: book.price || "",
-        availability: book.availability || "",
-        img:
-          book.thumbnail ||
-          "https://via.placeholder.com/150x220?text=No+Image",
-      }));
+    const fetchBooks = async () => {
+      try {
+        const res = await api.get("/showbooks");
+        const apiBooks = (res.data.books || []).map((book) => ({
+          id: book.id,
+          title: book.title,
+          author: book.authors,
+          rating: book.rating || "",
+          categories: book.categories || "Unknown",
+          price: book.price || "",
+          availability: book.availability || "",
+          img:
+            book.thumbnail ||
+            "https://via.placeholder.com/150x220?text=No+Image",
+        }));
 
-      //  Category grouping map
-      const categoryGroups = {
-        fiction: ["fiction", "novel", "literature", "drama"],
-        "non-fiction": ["non-fiction", "biography", "history", "self-help", "education"],
-        mystery: ["mystery", "thriller", "crime", "detective"],
-        fantasy: ["fantasy", "adventure", "mythology", "magical"],
-        "sci-fi": ["sci-fi", "science fiction", "space", "technology", "future"],
-      };
+        //  Category grouping map
+        const categoryGroups = {
+          fiction: ["fiction", "novel", "literature", "drama"],
+          "non-fiction": ["non-fiction", "biography", "history", "self-help", "education"],
+          mystery: ["mystery", "thriller", "crime", "detective"],
+          fantasy: ["fantasy", "adventure", "mythology", "magical"],
+          "sci-fi": ["sci-fi", "science fiction", "space", "technology", "future"],
+        };
 
-      //  Function to normalize book category
-      const mapToMainCategory = (cat) => {
-        const normalized = cat.toLowerCase();
-        for (const [main, keywords] of Object.entries(categoryGroups)) {
-          if (keywords.some((k) => normalized.includes(k))) return main;
-        }
-        return "fiction"; // default fallback
-      };
+        //  Function to normalize book category
+        const mapToMainCategory = (cat) => {
+          const normalized = cat.toLowerCase();
+          for (const [main, keywords] of Object.entries(categoryGroups)) {
+            if (keywords.some((k) => normalized.includes(k))) return main;
+          }
+          return "fiction"; // default fallback
+        };
 
-      //  Assign grouped categories to each book
-      const groupedBooks = apiBooks.map((b) => ({
-        ...b,
-        categories: mapToMainCategory(b.categories),
-      }));
+        //  Assign grouped categories to each book
+        const groupedBooks = apiBooks.map((b) => ({
+          ...b,
+          categories: mapToMainCategory(b.categories),
+        }));
 
-      // Show only 5 filters in sidebar
-      const visibleCategories = ["fiction", "non-fiction", "mystery", "fantasy", "sci-fi"];
+        // Show only 5 filters in sidebar
+        const visibleCategories = ["fiction", "non-fiction", "mystery", "fantasy", "sci-fi"];
 
-      setBooks(groupedBooks);
-      setFilteredBooks(groupedBooks);
-      setCategories(visibleCategories);
-    } catch (err) {
-      console.error("Error fetching books:", err);
-    }
-  };
-  fetchBooks();
-}, []);
+        setBooks(groupedBooks);
+        setFilteredBooks(groupedBooks);
+        setCategories(visibleCategories);
+      } catch (err) {
+        console.error("Error fetching books:", err);
+      }
+    };
+    fetchBooks();
+  }, []);
 
   const handleFilterChange = (e) => {
     const { name, value, checked } = e.target;
@@ -81,9 +82,15 @@ const BrowsePage = () => {
     });
   };
 
-  const handleApplyFilters = () => {
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
+  // Apply filters and sorting
+  const applyFiltersAndSorting = () => {
     let result = books;
 
+    // Apply filters
     if (filters.categories.length > 0) {
       result = result.filter((book) =>
         filters.categories.includes(book.categories)
@@ -114,8 +121,38 @@ const BrowsePage = () => {
       );
     }
 
+    // Apply sorting
+    result = sortBooks(result, sortBy);
+
     setFilteredBooks(result);
     setCurrentPage(0);
+  };
+
+  const sortBooks = (booksToSort, sortType) => {
+    const sortedBooks = [...booksToSort];
+    
+    switch (sortType) {
+      case "newest":
+        // Assuming newer books have higher IDs - adjust based on your data
+        return sortedBooks.sort((a, b) => b.id - a.id);
+      
+      case "price-low":
+        return sortedBooks.sort((a, b) => (a.price || 0) - (b.price || 0));
+      
+      case "price-high":
+        return sortedBooks.sort((a, b) => (b.price || 0) - (a.price || 0));
+      
+      case "popularity":
+        // Assuming higher rating means more popular - adjust based on your data
+        return sortedBooks.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      
+      default:
+        return sortedBooks;
+    }
+  };
+
+  const handleApplyFilters = () => {
+    applyFiltersAndSorting();
   };
 
   const handleReset = () => {
@@ -125,12 +162,21 @@ const BrowsePage = () => {
       price: [],
       availability: [],
     });
+    setSortBy("newest");
     setFilteredBooks(books);
     setCurrentPage(0);
     document
       .querySelectorAll('.filters input[type="checkbox"]')
       .forEach((cb) => (cb.checked = false));
+    // Reset sort dropdown to default
+    const sortSelect = document.getElementById("sort-by");
+    if (sortSelect) sortSelect.value = "newest";
   };
+
+  // Apply sorting when sort option changes
+  useEffect(() => {
+    applyFiltersAndSorting();
+  }, [sortBy]);
 
   const pageCount = Math.ceil(filteredBooks.length / itemsPerPage);
   const startOffset = currentPage * itemsPerPage;
@@ -214,7 +260,7 @@ const BrowsePage = () => {
             </label>
           </div>
 
-          <div className="filter-group">
+          {/* <div className="filter-group">
             <h4>Availability</h4>
             <label>
               <input
@@ -234,7 +280,7 @@ const BrowsePage = () => {
               />
               Pre-Order
             </label>
-          </div>
+          </div> */}
 
           <button className="btn-apply" onClick={handleApplyFilters}>
             Apply Filters
@@ -248,7 +294,7 @@ const BrowsePage = () => {
             <h2>All Books</h2>
             <div className="sort-options">
               <label>Sort By:</label>
-              <select id="sort-by">
+              <select id="sort-by" onChange={handleSortChange} value={sortBy}>
                 <option value="newest">Newest</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
@@ -270,7 +316,7 @@ const BrowsePage = () => {
                   <div className="b-price">
                     {book.price ? `$${book.price}` : "Price not set"}
                   </div>
-                  <Link to={`/book/${book.id}`} className="b-btn-view">View Details</Link>
+                  <Link to={`/book/${book.id}`} className="btn btn-full btn-view">View</Link>
                 </div>
               </div>
             ))}
