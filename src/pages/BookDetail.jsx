@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import api from "../../api/axios";
 import { Link } from "react-router";
-import { toast } from "react-toastify";
+
 const BookDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,11 +11,11 @@ const BookDetail = () => {
   const [randomBooks, setRandomBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const isLoggedIn = localStorage.getItem("userAuth") === "true";
 
   useEffect(() => {
     const fetchBookData = async () => {
       try {
-        // Fetch main book detail
         const res = await api.get(`/books/${id}`);
         const bookData = res.data.book || res.data;
         setBook(bookData);
@@ -111,17 +111,22 @@ const BookDetail = () => {
                 <a
                   href="#"
                   className="btn btn-full"
-                  onClick={() => navigate("/borrowcheckout")}>
+                  onClick={() => navigate("/borrowcheckout")}
+                >
                   Borrow
                 </a>
                 <a href="/pricing" className="btn btn-outline subscribe-btn">
                   Subscribe
                 </a>
-                <Link
-                  to={`/preview/${book.id}`}
-                  className="btn btn-outline subscribe-btn">
-                  Preview
-                </Link>
+                {/* Show Preview button only if user is logged in */}
+                {isLoggedIn && (
+                  <Link
+                    to={`/preview/${book.id}`}
+                    className="btn btn-outline subscribe-btn"
+                  >
+                    Preview
+                  </Link>
+                )}
               </div>
 
               <div className="book-description">{renderDescription()}</div>
@@ -156,7 +161,8 @@ const BookDetail = () => {
                     onClick={() => navigate(`/book/${simBook.id}`)}
                     style={{
                       cursor: "pointer",
-                    }}>
+                    }}
+                  >
                     <img
                       src={
                         simBook.thumbnail ||
