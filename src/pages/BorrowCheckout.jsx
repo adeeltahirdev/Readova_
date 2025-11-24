@@ -1,97 +1,113 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom"; 
 import CheckLayout from "../layouts/CheckLayout";
-
+import api from "../../api/axios.js"; 
+import { toast } from "react-toastify";
 
 const BorrowCheckout = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [days, setDays] = useState(7);
   const [error, setError] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const userId = localStorage.getItem("userId") || localStorage.getItem("id");
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const { data } = await api.get(`/books/${id}`);
+        if (data && data.book) {
+          setBook(data.book);
+        } else {
+          toast.error("Book data missing");
+          navigate("/library");
+        }
+      } catch (err) {
+        toast.error("Failed to load book details");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const books = [
-    {
-      title: "The Midnight Library",
-      author: "Matt Haig",
-      pricePerDay: 30,
-      image: "https://via.placeholder.com/100x150",
-    },
-    {
-      title: "Atomic Habits",
-      author: "James Clear",
-      pricePerDay: 40,
-      image: "https://via.placeholder.com/100x150",
-    },
-  ];
+    if (id) fetchBook();
+  }, [id, navigate]);
 
-  const total = books.reduce((acc, book) => acc + book.pricePerDay * days, 0);
+  const pricePerDay = book ? parseFloat(book.price) : 0;
+  const total = (pricePerDay * days).toFixed(2);
 
   const handleDaysChange = (e) => {
     const value = Number(e.target.value);
-    if (value < 1 || value > 30) {
-      setError("Days must be between 1 and 30");
+    if (value < 1 || value > 7) {
+      setError("Days must be between 1 and 7");
     } else {
       setError("");
       setDays(value);
     }
   };
+  const handleCheckout = async () => {
+    if (!userId) {
+        toast.error("User not found. Please login again.");
+        return;
+    }
+    if (error || days < 1) return;
+    
+    setProcessing(true);
 
-  const handleCheckout = () => {
-    alert("Checkout complete! (demo)");
+    try {
+      const payload = {
+        user_id: userId, 
+        book_id: book.id,
+        days: days
+      };
+
+      const response = await api.post('/borrow', payload);
+      
+      if(response.status === 200) {
+        toast.success("Borrow successful!");
+        navigate(`/preview/${book.id}`);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Checkout failed");
+    } finally {
+      setProcessing(false);
+    }
   };
+
+  if (loading) return <div className="p-10 text-center">Loading...</div>;
+  if (!book) return null;
 
   return (
     <CheckLayout>
       <div className="checkout-container">
-        {/* Left Section */}
         <div className="checkout-left">
-          <h2 className="checkout-heading">Books You're Borrowing</h2>
-          {books.map((book, index) => (
-            <div key={index} className="book-detail">
-              <img src={book.image} alt={book.title} className="book-image" />
-              <div>
-                <h3>{book.title}</h3>
-                <p>Author: {book.author}</p>
-                <p>Borrowing for {days} days</p>
-              </div>
+          <h2 className="checkout-heading">Confirm Borrowing</h2>
+          <div className="book-detail">
+            {book.thumbnail && <img src={book.thumbnail} alt={book.title} className="book-image" />}
+            <div>
+              <h3>{book.title}</h3>
+              <p>Author: {book.authors}</p>
             </div>
-          ))}
+          </div>
         </div>
 
-        {/* Right Section */}
         <div className="checkout-right">
           <h2 className="checkout-heading">Order Summary</h2>
-
           <label className="days-label">
-            Days to Borrow:
-            <input
-              type="number"
-              value={days}
-              min={1}
-              max={30}
-              onChange={handleDaysChange}
-              className="days-input"
-            />
+            Days: <input type="number" value={days} min={1} max={30} onChange={handleDaysChange} className="days-input" />
           </label>
-
           {error && <p className="days-error">{error}</p>}
-
-          {books.map((book, index) => (
-            <div key={index} className="summary-item">
-              <p>
-                <strong>{book.title}</strong>
-              </p>
-              <p>Author: {book.author}</p>
-              <p>Price per day: Rs. {book.pricePerDay}</p>
-              <p>Total: Rs. {book.pricePerDay * days}</p>
-            </div>
-          ))}
-
+          
+          <div className="summary-item">
+             <p>Price: Rs. {pricePerDay} / day</p>
+          </div>
+          
           <h3 className="total-text">Total: Rs. {total}</h3>
 
-          <button
-            className="checkout-button"
-            onClick={handleCheckout}
-            disabled={!!error}
-          >
-            Proceed to Checkout
+          <button className="checkout-button" onClick={handleCheckout} disabled={!!error || processing}>
+            {processing ? "Processing..." : "Confirm & Borrow"}
           </button>
         </div>
       </div>

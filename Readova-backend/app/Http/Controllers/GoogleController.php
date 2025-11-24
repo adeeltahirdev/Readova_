@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Books;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-
+use App\Models\Borrow;
+use Carbon\Carbon;
+use App\Models\Rating;
 class GoogleController extends Controller
 {
     public function index(Request $request)
@@ -43,6 +45,7 @@ class GoogleController extends Controller
                     'categories'    => $info['categories'][0] ?? 'General',
                     'publishedDate' => $info['publishedDate'] ?? null,
                     'infoLink'      => $info['infoLink'] ?? null,
+                    'page_count'    => $info['pageCount'] ?? 0,
                 ];
             })
             ->values();
@@ -53,6 +56,7 @@ class GoogleController extends Controller
                     [
                     'google_id' => $bookData['google_id'], 
                     'info_link' => $bookData['infoLink'],
+                    'page_count' => $bookData['page_count'],
                     'published_date' => $bookData['publishedDate'],
                     'price' => number_format(mt_rand(1000, 5000) / 100, 2, '.', '')
                     ],
@@ -66,19 +70,80 @@ class GoogleController extends Controller
             'books' => $books,
         ]);
     }
-    public function detail($id)
+    public function rateBook(Request $request)
     {
-        $book = Books::find($id);
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'rating'  => 'required|integer|min:1|max:5',
+        ]);
+        Rating::updateOrCreate(
+            [
+                'user_id' => $request->user_id,
+                'book_id' => $request->book_id
+            ],
+            [
+                'rating' => $request->rating
+            ]
+        );
+
+        return response()->json(['message' => 'Rating saved successfully']);
+    }
+    public function detail(Request $request, $id)
+    {
+        $book = Books::withAvg('ratings', 'rating')->find($id);
         if (!$book) {
             return response()->json(['message' => 'Book not found'], 404);
         }
-        // Ensure google_id exists; if not, you could set it to null or handle differently
+        $book->rating = round($book->ratings_avg_rating, 1) ?? 0;
+        unset($book->ratings_avg_rating);
+        $previewAccess = false;
+        $userId = $request->query('user_id');
+
+        if ($userId) {
+            $now = Carbon::now();
+            $activeBorrow = Borrow::where('user_id', $userId)
+                ->where('book_id', $book->id)
+                ->where('borrowed_at', '<=', $now)
+                ->where('expires_at', '>=', $now)
+                ->first();
+
+            if ($activeBorrow) {
+                $previewAccess = true;
+            }
+        }
+
         $googleId = $book->google_id ?? null;
         $previewLink = $googleId ? "https://books.google.com/books?id={$googleId}&printsec=frontcover" : null;
+
         return response()->json([
             'book' => $book,
-            'google_id' => $googleId,  // Keep this for the viewer
-            'google_preview_link' => $previewLink,  // Optional direct link
+            'google_id' => $googleId,
+            'google_preview_link' => $previewLink,
+            'preview_access' => $previewAccess,
+        ]);
+    }
+    public function borrowBook(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'days'    => 'required|integer|min:1|max:30',
+        ]);
+
+        $book = Books::find($request->book_id);
+        $totalPrice = $book->price * $request->days;
+        $borrow = Borrow::create([
+            'user_id'     => $request->user_id,
+            'book_id'     => $book->id,
+            'price'       => $totalPrice,
+            'borrowed_at' => Carbon::now(),
+            'expires_at'  => Carbon::now()->addDays($request->days),
+        ]);
+
+        return response()->json([
+            'message' => 'Book borrowed successfully!',
+            'borrow' => $borrow
         ]);
     }
 
@@ -105,6 +170,7 @@ class GoogleController extends Controller
                 'categories',
                 'published_date',
                 'info_link',
+                'page_count',
                 'price',
             ]);
         return response()->json([

@@ -15,6 +15,11 @@ class Books extends Model
         'categories',
         'published_date',
         'info_link',
-        'price'
+        'price',
+        'page_count',
     ];
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class, 'book_id');
+    }
 }

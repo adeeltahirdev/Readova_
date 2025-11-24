@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_pricing', function (Blueprint $table) {
+        Schema::create('ratings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('type_id')->constrained('types')->onDelete('cascade');
-            $table->string('price');
+            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
+            $table->integer('rating');
             $table->timestamps();
+            $table->unique(['user_id', 'book_id']);
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_pricing');
+        Schema::dropIfExists('ratings');
     }
 };

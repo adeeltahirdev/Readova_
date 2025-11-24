@@ -4,7 +4,6 @@ import api from "../../api/axios.js";
 import { toast } from "react-toastify";
 import {
   ArrowLeftIcon,
-  ShareIcon,
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
   BookOpenIcon,
@@ -17,13 +16,18 @@ import "../../src/assets/css/preview.css";
 const PreviewBook = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [previewAccess, setPreviewAccess] = useState(false);
+  
+  // Rating State
+  const [rating, setRating] = useState(0); 
+  const [savedPage, setSavedPage] = useState(null);
 
-  const [rating, setRating] = useState(0); // New
-  const [savedPage, setSavedPage] = useState(null); // New
+  // Get User ID
+  const userId = localStorage.getItem("userId") || localStorage.getItem("id");
 
   const iframeRef = useRef(null);
 
@@ -31,14 +35,16 @@ const PreviewBook = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const { data } = await api.get(`/books/${id}`);
+        const { data } = await api.get(`/books/${id}?user_id=${userId}`);
         if (data?.book) {
           setBook(data.book);
+          setPreviewAccess(data.preview_access ?? false);
         } else {
           toast.error("Book not found");
           navigate(-1);
         }
       } catch (err) {
+        console.error(err);
         toast.error(err.response?.data?.message || "Failed to load book");
         navigate(-1);
       } finally {
@@ -47,15 +53,12 @@ const PreviewBook = () => {
     };
 
     if (id) fetchBook();
-  }, [id, navigate]);
+  }, [id, navigate, userId]);
 
-  /* ======================== LOAD LOCAL BOOKMARK & RATING ======================== */
+  /* ======================== LOAD BOOKMARK ONLY ======================== */
   useEffect(() => {
     const saved = localStorage.getItem(`bookmark_${id}`);
     if (saved) setSavedPage(Number(saved));
-
-    const storedRating = localStorage.getItem(`rating_${id}`);
-    if (storedRating) setRating(Number(storedRating));
   }, [id]);
 
   /* ======================== TOGGLE FULLSCREEN ======================== */
@@ -73,39 +76,11 @@ const PreviewBook = () => {
     }
   };
 
-  /* ======================== SHARE ======================== */
-  const shareBook = async () => {
-    if (!book) return;
-
-    const shareData = {
-      title: book.title,
-      text: `Check out "${book.title}" by ${book.authors}`,
-      url: window.location.href,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch {
-        toast.info("Share cancelled");
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        toast.success("Link copied to clipboard!");
-      } catch {
-        toast.error("Failed to copy link");
-      }
-    }
-  };
-
-  /* ======================== BOOKMARK (LOCAL, GENERIC) ======================== */
+  /* ======================== BOOKMARK (LOCAL) ======================== */
   const saveBookmark = () => {
     const iframe = iframeRef.current;
     if (!iframe) return;
-
     iframe.contentWindow.postMessage({ type: "GET_PAGE" }, "*");
-
     window.addEventListener(
       "message",
       (event) => {
@@ -120,11 +95,26 @@ const PreviewBook = () => {
     );
   };
 
-  /* ======================== STAR RATING (LOCAL, GENERIC) ======================== */
-  const handleRating = (value) => {
+  /* ======================== STAR RATING (DB API) ======================== */
+  const handleRating = async (value) => {
+    if (!userId) {
+        toast.error("You must be logged in to rate.");
+        return;
+    }
     setRating(value);
-    localStorage.setItem(`rating_${id}`, value);
-    toast.success(`You rated this book ${value} stars`);
+
+    try {
+        await api.post('/rate', {
+            user_id: userId,
+            book_id: id,
+            rating: value
+        });
+        toast.success(`You rated this book ${value} stars`);
+    } catch (err) {
+        console.error(err);
+        toast.error("Failed to save rating");
+        setRating(0);
+    }
   };
 
   /* ======================== RENDER ======================== */
@@ -197,7 +187,7 @@ const PreviewBook = () => {
       </header>
 
       <section className="preview-fullpage">
-        {hasGooglePreview ? (
+        {hasGooglePreview && previewAccess ? (
           <iframe
             ref={iframeRef}
             src={`https://books.google.com/books?id=${book.google_id}&printsec=frontcover&output=embed`}
@@ -207,22 +197,25 @@ const PreviewBook = () => {
             loading="lazy"
           />
         ) : (
-          <div className="preview-fallback">
-            {book.cover_url ? (
-              <img src={book.cover_url} alt={`${book.title} cover`} className="fallback-cover" />
-            ) : (
-              <div className="fallback-icon-wrap">
-                <BookOpenIcon className="fallback-icon" />
-              </div>
-            )}
-
-            <h2 className="fallback-title">{book.title}</h2>
-            <p className="fallback-authors">{book.authors}</p>
-            {book.description ? (
-              <p className="fallback-description">{book.description}</p>
-            ) : (
-              <p className="fallback-description italic">No description available.</p>
-            )}
+          <div className="preview-locked">
+            <h2>Preview Locked</h2>
+            <p>You need to borrow this book to view the full preview.</p>
+            <button 
+                onClick={() => navigate(`/borrowcheckout/${id}`)}
+                className="borrow-btn"
+                style={{
+                    marginTop: "20px",
+                    padding: "10px 20px",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px"
+                }}
+            >
+                Go to Borrow Page
+            </button>
           </div>
         )}
       </section>

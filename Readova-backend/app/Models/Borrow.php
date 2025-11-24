@@ -5,22 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserPricing extends Model
+class Borrow extends Model
 {
     use HasFactory;
-    protected $table = 'user_pricing';
+
     protected $fillable = [
         'user_id',
-        'type_id',
+        'book_id',
         'price',
+        'borrowed_at',
+        'expires_at',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function type()
+    public function book()
     {
-        return $this->belongsTo(Type::class);
+        return $this->belongsTo(Books::class);
     }
 }
