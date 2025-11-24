@@ -46,8 +46,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function user_pricings()
+    public function borrows()
     {
-        return $this->hasMany(UserPricing::class, 'user_id');
+        return $this->hasMany(Borrow::class);
     }
 }

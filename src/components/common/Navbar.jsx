@@ -54,6 +54,8 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("userAuth");
     localStorage.removeItem("adminAuth");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userId");
     setUsername("");
     navigate("/auth/register");
     closeMobileMenu();
@@ -146,7 +148,7 @@ const Navbar = () => {
                   </li>
                   <li>
                     <Link
-                      to="#"
+                      to="/auth/register"
                       onClick={(e) => {
                         e.preventDefault();
                         handleLogout();

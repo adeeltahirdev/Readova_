@@ -47,7 +47,7 @@ const Router = () => {
         }
       />
       <Route
-        path="/borrowcheckout"
+        path="/borrowcheckout/:id"
         element={
           <PrivateRoute>
             <BorrowCheckout />

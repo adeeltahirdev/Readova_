@@ -18,7 +18,9 @@ Route::get('/user', [LoginController::class, 'me']);
 Route::get('/allusers', [LoginController::class, 'index']);
 Route::get('/books', [GoogleController::class, 'index']);
 Route::get('/showbooks', [GoogleController::class, 'show']);
-Route::delete('/books/{id}', [GoogleController::class, 'destroy']);
+Route::delete('deletebooks/{id}', [GoogleController::class, 'destroy']);
 
-Route::get('/books/{id}', [GoogleController::class, 'detail']);  
+Route::post('/rate', [GoogleController::class, 'rateBook']);
+Route::get('/books/{id}', [GoogleController::class, 'detail']);
+Route::post('/borrow', [GoogleController::class, 'borrowBook']);
 Route::post('/subscribeplan', [UserPriceController::class, 'store']);

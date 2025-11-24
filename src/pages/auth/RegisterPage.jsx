@@ -6,6 +6,7 @@ import "../../assets/css/login.css";
 import axios from "../../../api/axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
 const RegisterPage = () => {
   const [login, setLogin] = useState(true);
   const [loginEmail, setLoginEmail] = useState("");
@@ -24,6 +25,11 @@ const RegisterPage = () => {
         email: loginEmail,
         password: loginPassword,
       });
+      if (res.data.user && res.data.user.id) {
+        localStorage.setItem("userId", res.data.user.id);
+      } else if (res.data.id) {
+        localStorage.setItem("userId", res.data.id);
+      }
 
       if (res.data.is_admin) {
         localStorage.setItem("userEmail", loginEmail);
@@ -45,6 +51,7 @@ const RegisterPage = () => {
         }, 500);
       }
     } catch (err) {
+      console.error(err);
       toast.error(err.response?.data?.message || "Login failed", {
         style: { background: "#b00020", color: "white" },
       });

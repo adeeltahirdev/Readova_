@@ -44,7 +44,7 @@ const BooksManagement = () => {
   const deleteBook = async (id) => {
     if (!window.confirm("Are you sure you want to delete this book?")) return;
     try {
-      await axios.delete(`/books/${id}`);
+      await axios.delete(`deletebooks/${id}`);
       setBooks(books.filter((book) => book.id !== id));
       toast.success("Book deleted successfully!");
     } catch (err) {
