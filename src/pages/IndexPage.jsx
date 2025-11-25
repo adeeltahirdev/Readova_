@@ -12,12 +12,6 @@ import Book7 from "../assets/images/covers/Book7.jpg";
 import Book8 from "../assets/images/covers/Book8.png";
 import Book9 from "../assets/images/covers/Book9.jpg";
 import Book10 from "../assets/images/covers/Book10.jpg";
-import Customer1 from "../assets/images/customers/customer-1.jpg";
-import Customer2 from "../assets/images/customers/customer-2.jpg";
-import Customer3 from "../assets/images/customers/customer-3.jpg";
-import Customer4 from "../assets/images/customers/customer-4.jpg";
-import Customer5 from "../assets/images/customers/customer-5.jpg";
-import Customer6 from "../assets/images/customers/customer-6.jpg";
 import api from "../../api/axios.js";
 
 const IndexPage = () => {
@@ -169,21 +163,7 @@ const IndexPage = () => {
               <a href="/browse" className="btn btn-outline">
                 Explore
               </a>
-              <div className="community">
-                <div className="community-imgs">
-                  <img src={Customer1} alt="customer photo" />
-                  <img src={Customer2} alt="customer photo" />
-                  <img src={Customer3} alt="customer photo" />
-                  <img src={Customer4} alt="customer photo" />
-                  <img src={Customer5} alt="customer photo" />
-                  <img src={Customer6} alt="customer photo" />
-                </div>
-                <p className="community-text">
-                  <span>100K+</span>
-                  <br />
-                  Book Readers Worldwide
-                </p>
-              </div>
+              
             </div>
             <div className="hero-img-box">
               <img

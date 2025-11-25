@@ -84,12 +84,6 @@ const Admin = () => {
                   <span>Users Management</span>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link to="#settings" className="nav-link">
-                  <MdSettings className="nav-icon" />
-                  <span>Settings</span>
-                </Link>
-              </li>
             </ul>
           </nav>
           <div className="sidebar-footer">
@@ -111,16 +105,6 @@ const Admin = () => {
                 <button
                   onClick={handleLogout}
                   className="logout-btn"
-                  style={{
-                    marginLeft: "15px",
-                    padding: "8px 16px",
-                    background: "#ff4444",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    fontSize: "14px",
-                  }}
                 >
                   Logout
                 </button>
@@ -171,128 +155,8 @@ const Admin = () => {
             </div>
           </section>
 
-          {/* Books Management Section */}
-          <section className="management-section">
-            <div className="section-header">
-              <h2 className="section-title">Books Management</h2>
-              <button className="btn btn-primary" onClick={openModal}>
-                <i className="fas fa-plus"></i> Add New Book
-              </button>
-            </div>
-
-            <div className="table-container">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Cover</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <img
-                        src="book1.jpg"
-                        alt="Book Cover"
-                        className="book-cover-small"
-                      />
-                    </td>
-                    <td>The Midnight Library</td>
-                    <td>Matt Haig</td>
-                    <td>Fiction</td>
-                    <td>
-                      <span className="status-badge status-active">Active</span>
-                    </td>
-                    <td className="action-buttons">
-                      <button className="btn-action btn-edit" title="Edit">
-                        <i className="fas fa-edit"></i>
-                      </button>
-                      <button className="btn-action btn-delete" title="Delete">
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  {/* Add more rows as needed */}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {isModalOpen && (
-            <div className="modal admin-modal" id="addBookModal">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h3>Add New Book</h3>
-                  <button className="modal-close" onClick={closeModal}>
-                    &times;
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <form className="book-form">
-                    <div className="form-group">
-                      <label htmlFor="bookTitle">Book Title</label>
-                      <input type="text" id="bookTitle" className="form-control" required />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="bookAuthor">Author</label>
-                      <input type="text" id="bookAuthor" className="form-control" required />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="bookCategory">Category</label>
-                      <select id="bookCategory" className="form-control" required>
-                        <option value="">Select Category</option>
-                        <option value="fiction">Fiction</option>
-                        <option value="non-fiction">Non-Fiction</option>
-                        <option value="mystery">Mystery</option>
-                        <option value="fantasy">Fantasy</option>
-                        <option value="sci-fi">Sci-Fi</option>
-                      </select>
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="bookDescription">Description</label>
-                      <textarea id="bookDescription" className="form-control" rows="4"></textarea>
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="bookCover">Cover Image</label>
-                      <input type="file" id="bookCover" className="form-control" accept="image/*" />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="bookPrice">Price ($)</label>
-                      <input type="number" id="bookPrice" className="form-control" step="0.01" min="0" />
-                    </div>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
-                  <button className="btn btn-primary">Save Book</button>
-                </div>
-              </div>
-            </div>
-          )}
-          <section className="quick-actions">
-            <h2 className="section-title">Quick Actions</h2>
-            <div className="actions-grid">
-              <div className="action-card">
-                <i className="fas fa-chart-line"></i>
-                <h3>View Reports</h3>
-                <p>Generate analytics reports</p>
-              </div>
-              <div className="action-card">
-                <i className="fas fa-cog"></i>
-                <h3>System Settings</h3>
-                <p>Configure platform settings</p>
-              </div>
-            </div>
-          </section>
+         
+          
         </main>
       </div>
     </AdminLayout>

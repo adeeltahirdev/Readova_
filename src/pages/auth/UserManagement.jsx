@@ -107,12 +107,6 @@ const UserManagement = () => {
                   <span>Users Management</span>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link to="#settings" className="nav-link">
-                  <MdSettings className="nav-icon" />
-                  <span>Settings</span>
-                </Link>
-              </li>
             </ul>
           </nav>
           <div className="sidebar-footer">
@@ -146,8 +140,9 @@ const UserManagement = () => {
               </button>
             </div>
 
-            <div className="search-bar">
+            <div>
               <input
+                className="search-bar search" 
                 type="text"
                 placeholder="Search users..."
                 value={query}
