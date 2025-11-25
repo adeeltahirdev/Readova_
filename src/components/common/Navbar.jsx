@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Logo from "../../assets/images/Logo.png";
 import { MdPerson2, MdNotifications, MdMenu, MdClose } from "react-icons/md";
+import { UserIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../../api/axios";
 
@@ -133,7 +134,7 @@ const Navbar = () => {
           {isLoggedIn && (
             <div className="user-dropdown-container">
               <div className="user-icon-wrapper">
-                {username || <MdPerson2 className="log-icon" />}
+                {username || <UserIcon className="log-icon" />}
               </div>
               <div className="user-dropdown">
                 <ul>
