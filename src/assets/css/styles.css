@@ -2371,35 +2371,7 @@ body.nav-open .btn-mobile-nav .close-icon {
   color: #666;
 }
 
-/* Statistics Section */
-.about-stats {
-  background: #001f59;
-  color: white;
-  padding: 4rem 0;
-}
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 3rem;
-  text-align: center;
-}
-
-.stat-item {
-  padding: 2rem;
-}
-
-.stat-number {
-  font-size: 3.6rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: white;
-}
-
-.stat-label {
-  font-size: 1.6rem;
-  opacity: 0.9;
-}
 
 /* CTA Section */
 .about-cta {

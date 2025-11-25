@@ -140,48 +140,24 @@ const AboutPage = () => {
             <div className="grid grid-2-col">
               <div className="team-member">
                 <div className="member-avatar">👨‍💼</div>
-                <h3 className="member-name">Alex Johnson</h3>
-                <p className="member-role">Founder & CEO</p>
+                <h3 className="member-name">Muhammad Adeel tahir</h3>
+                <p className="member-role">BSCS-MC-76</p>
                 <p className="member-bio">
-                  Former librarian turned tech entrepreneur, Alex combines his love 
-                  for literature with innovative technology. With over 8 years in 
-                  the publishing industry, he leads Readova's vision and strategy.
+                  Student and aspiring software developer with a passion for books 
+                  and technology. Adeel is focused on front-end development and user 
+                  experience design to make Readova intuitive and enjoyable.
                 </p>
               </div>
               
               <div className="team-member">
-                <div className="member-avatar">👩‍💻</div>
-                <h3 className="member-name">Sarah Chen</h3>
-                <p className="member-role">Chief Technology Officer</p>
+                <div className="member-avatar">👨‍💼</div>
+                <h3 className="member-name">Muhammad AsadUllah</h3>
+                <p className="member-role">BSCS-MC-108</p>
                 <p className="member-bio">
-                  Software engineer with 10+ years experience in building scalable 
-                  platforms and AI recommendation systems. Sarah oversees all technical 
-                  development and ensures our platform runs smoothly for thousands of users.
+                  Student and enthusiast who loves building robust systems. 
+                  AsadUllah focuses on ensuring Readova's platform is reliable, 
+                  scalable, and secure for all users.
                 </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Statistics Section */}
-        <section className="about-stats mrgn-btm-md">
-          <div className="container">
-            <div className="stats-grid">
-              <div className="stat-item">
-                <div className="stat-number">50,000+</div>
-                <div className="stat-label">Books Available</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">100,000+</div>
-                <div className="stat-label">Active Readers</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">150+</div>
-                <div className="stat-label">Countries Served</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">98%</div>
-                <div className="stat-label">User Satisfaction</div>
               </div>
             </div>
           </div>
