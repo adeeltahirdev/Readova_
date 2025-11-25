@@ -155,14 +155,15 @@ const BooksManagement = () => {
               </button>
             </div>
 
-            <div className="search-bar">
+            <div>
               <input
+                className="search-bar search"
                 type="text"
                 placeholder="Search books..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
-              <button onClick={() => fetchBooks(query)} className="btn btn-secondary">
+              <button onClick={() => fetchBooks(query)} className="btn btn-primary">
                 Search
               </button>
             </div>
@@ -217,7 +218,7 @@ const BooksManagement = () => {
                 {/* Pagination */}
                 <div className="pagination-container">
                   <button
-                    className="btn btn-secondary"
+                    className="btn btn-primary btn-m"
                     onClick={() => paginate(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
@@ -237,7 +238,7 @@ const BooksManagement = () => {
                   ))}
 
                   <button
-                    className="btn btn-secondary"
+                    className="btn btn-primary btn-m"
                     onClick={() => paginate(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >

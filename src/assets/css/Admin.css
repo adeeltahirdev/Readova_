@@ -95,6 +95,29 @@
     margin-right: 0.5rem;
 }
 
+.logout-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.search{
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+.btn-m{
+    padding: 8px 16px;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
 /* Main Content Styles */
 .admin-main {
     flex: 1;

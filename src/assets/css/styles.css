@@ -24,8 +24,8 @@
 .user-dropdown {
   display: none;
   position: absolute;
-  top: 3rem;
-  right: 0;
+  top: 1.5rem;
+  right: -3rem;
   background-color: #1a356a;
   color: #fff;
   border-radius: 8px;

@@ -146,8 +146,9 @@ const UserManagement = () => {
               </button>
             </div>
 
-            <div className="search-bar">
+            <div>
               <input
+                className="search-bar search" 
                 type="text"
                 placeholder="Search users..."
                 value={query}
