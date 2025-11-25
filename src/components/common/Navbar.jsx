@@ -62,6 +62,18 @@ const Navbar = () => {
     closeMobileMenu();
   };
 
+  const handleUserIconClick = () => {
+    if (!isLoggedIn) {
+      navigate("/auth/register");
+      closeMobileMenu();
+    }
+  };
+
+  const handleGenreClick = (genre) => {
+    navigate(`/browse?genre=${genre}`);
+    closeMobileMenu();
+  };
+
   return (
     <>
       {" "}
@@ -84,23 +96,48 @@ const Navbar = () => {
             </Link>
             <ul className="drop-menu">
               <li>
-                <Link className="drop-links" to="#">
+                <Link 
+                  className="drop-links" 
+                  to="/browse?genre=fiction"
+                  onClick={closeMobileMenu}
+                >
                   Fiction
                 </Link>
               </li>
               <li>
-                <Link className="drop-links" to="#">
+                <Link 
+                  className="drop-links" 
+                  to="/browse?genre=non-fiction"
+                  onClick={closeMobileMenu}
+                >
                   Non-Fiction
                 </Link>
               </li>
               <li>
-                <Link className="drop-links" to="#">
+                <Link 
+                  className="drop-links" 
+                  to="/browse?genre=mystery"
+                  onClick={closeMobileMenu}
+                >
                   Mystery
                 </Link>
               </li>
               <li>
-                <Link className="drop-links" to="#">
+                <Link 
+                  className="drop-links" 
+                  to="/browse?genre=fantasy"
+                  onClick={closeMobileMenu}
+                >
                   Fantasy
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  className="drop-links" 
+                  to="/browse?genre=sci-fi"
+                  onClick={closeMobileMenu}
+                >
+                  Sci-Fi
                 </Link>
               </li>
             </ul>
@@ -130,11 +167,11 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Only show user dropdown if logged in */}
-          {isLoggedIn && (
+          {/* Show user icon for both logged in and logged out users */}
+          {isLoggedIn ? (
             <div className="user-dropdown-container">
               <div className="user-icon-wrapper">
-                {username || <UserIcon className="log-icon" />}
+                {username || <MdPerson2 className="log-icon" />}
               </div>
               <div className="user-dropdown">
                 <ul>
@@ -159,6 +196,10 @@ const Navbar = () => {
                   </li>
                 </ul>
               </div>
+            </div>
+          ) : (
+            <div className="user-icon-wrapper" onClick={handleUserIconClick}>
+              <MdPerson2 className="log-icon" style={{ cursor: "pointer" }} />
             </div>
           )}
 
@@ -191,11 +232,16 @@ const Navbar = () => {
                 Browse All
               </Link>
             </li>
-            <li>
-              <Link to="/library" onClick={closeMobileMenu}>
-                My Library
-              </Link>
-            </li>
+            
+            {/* Show library link only when logged in */}
+            {isLoggedIn && (
+              <li>
+                <Link to="/library" onClick={closeMobileMenu}>
+                  My Library
+                </Link>
+              </li>
+            )}
+            
             <li>
               <Link to="/pricing" onClick={closeMobileMenu}>
                 Pricing
@@ -216,51 +262,59 @@ const Navbar = () => {
                 <Link to="/browse?genre=fantasy" onClick={closeMobileMenu}>
                   Fantasy
                 </Link>
+                <Link to="/browse?genre=sci-fi" onClick={closeMobileMenu}>
+                  Sci-Fi
+                </Link>
               </div>
             </li>
           </ul>
 
           {/* Mobile Bottom Section */}
-          {isLoggedIn && (
-            <div className="mobile-nav-actions">
-              <div className="mobile-notification">
-                <MdNotifications className="mobile-icon" />
-                <span>Notifications</span>
-              </div>
-              <div className="mobile-user-dropdown">
-                <div
-                  className="mobile-account"
-                  onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}>
-                  <MdPerson2 className="mobile-icon" />
-                  <span>{username || "Account"}</span>
-                </div>
-                {isMobileUserMenuOpen && (
-                  <div className="mobile-user-dropdown-menu">
-                    <ul>
-                      <li>
-                        <span className="username-display">{username}</span>
-                      </li>
-                      <li>
-                        <Link to="/library" onClick={closeMobileMenu}>
-                          My Library
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/settings" onClick={closeMobileMenu}>
-                          Subscription
-                        </Link>
-                      </li>
-                      <li>
-                        <button className="logout-btn" onClick={handleLogout}>
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
+          <div className="mobile-nav-actions">
+            <div className="mobile-notification">
+              <MdNotifications className="mobile-icon" />
+              <span>Notifications</span>
             </div>
-          )}
+            <div className="mobile-user-dropdown">
+              <div
+                className="mobile-account"
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    navigate("/auth/register");
+                    closeMobileMenu();
+                  } else {
+                    setIsMobileUserMenuOpen((prev) => !prev);
+                  }
+                }}>
+                <MdPerson2 className="mobile-icon" />
+                <span>{isLoggedIn ? (username || "Account") : "Account"}</span>
+              </div>
+              {isLoggedIn && isMobileUserMenuOpen && (
+                <div className="mobile-user-dropdown-menu">
+                  <ul>
+                    <li>
+                      <span className="username-display">{username}</span>
+                    </li>
+                    <li>
+                      <Link to="/library" onClick={closeMobileMenu}>
+                        My Library
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/settings" onClick={closeMobileMenu}>
+                        Subscription
+                      </Link>
+                    </li>
+                    <li>
+                      <button className="logout-btn" onClick={handleLogout}>
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

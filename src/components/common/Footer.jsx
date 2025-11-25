@@ -54,18 +54,18 @@ const Footer = () => {
                 <nav className="nav-col">
                     <p className="footer-heading">Company</p>
                     <ul className="footer-nav">
-                        <li><a className="footer-link" href="#">About Us</a></li>
-                        <li><a className="footer-link" href="#">Contact Us</a></li>
+                        <li><a className="footer-link" href="/aboutus">About Us</a></li>
+                        <li><a className="footer-link" href="/contactus">Contact Us</a></li>
                     </ul>
                 </nav>
 
                 <nav className="nav-col">
                     <p className="footer-heading">SERVICES</p>
                     <ul className="footer-nav">
-                        <li><a className="footer-link" href="#">Borrow</a></li>
-                        <li><a className="footer-link" href="#">Membership</a></li>
+                        <li><a className="footer-link" href="/browse">Borrow</a></li>
+                        <li><a className="footer-link" href="#">Subscription</a></li>
                         <li>
-                            <a className="footer-link" href="/library#wishlist-bookmarks"
+                            <a className="footer-link" href="/library"
                             >Wishlist</a
                             >
                         </li>
@@ -75,10 +75,8 @@ const Footer = () => {
                 <nav className="nav-col">
                     <p className="footer-heading">QUICK LINKS</p>
                     <ul className="footer-nav">
-                        <li><a className="footer-link" href="/register">Login</a></li>
+                        <li><a className="footer-link" href="/auth/register">Login</a></li>
                         <li><a className="footer-link" href="/browse">Browse</a></li>
-                        <li><a className="footer-link" href="#">Privacy & Policy</a></li>
-                        <li><a className="footer-link" href="#">Terms & Conditions</a></li>
                     </ul>
                 </nav>
                 
