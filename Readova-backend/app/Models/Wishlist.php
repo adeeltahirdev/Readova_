@@ -13,14 +13,10 @@ class Wishlist extends Model
         'user_id',
         'book_id'
     ];
-
-    // Link to the Book details
     public function book()
     {
         return $this->belongsTo(Books::class, 'book_id');
     }
-
-    // Link to the User
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
