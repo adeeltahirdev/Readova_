@@ -142,12 +142,12 @@ class GoogleController extends Controller
             'book_id' => 'required|exists:books,id',
             'days'    => 'required|integer|min:1|max:30',
         ]);
-        $activeSub = Subscription::where('user_id', $request->user_id)
-            ->where('expiry_date', '>', Carbon::now())
+        $activeSub = Borrow::where('user_id', $request->user_id)
+            ->where('expires_at', '>', Carbon::now())
             ->first();
         if ($activeSub) {
             return response()->json([
-                'message' => 'You already have an active Plan. Please contact the Administrator.'
+                'message' => 'You already have Borrowed a Book. Please contact the Administrator.'
             ], 403);
         }
 
