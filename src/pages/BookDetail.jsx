@@ -53,10 +53,7 @@ const BookDetail = () => {
     if (id) fetchBookData();
   }, [id, userId, isLoggedIn]);
   const handleToggleWishlist = async () => {
-      if (!isLoggedIn) {
-          toast.info("Please login to save to wishlist");
-          return;
-      }
+      if (!isLoggedIn) return;
       try {
           const response = await api.post('/wishlist/toggle', {
               user_id: userId,
@@ -137,7 +134,6 @@ const BookDetail = () => {
                 src={book.thumbnail || "https://via.placeholder.com/200x300?text=No+Image"}
                 alt={book.title}
                 className="book-cover-large"
-                style={{marginTop:"10px"}}
               />
             </div>
 
@@ -147,28 +143,30 @@ const BookDetail = () => {
                     <h1 className="heading-primary" style={{marginBottom: "5px"}}>{book.title}</h1>
                     <p className="book-author">By {book.authors}</p>
                   </div>
-                  <button 
-                    onClick={handleToggleWishlist}
-                    style={{
-                        background: "none", 
-                        border: "1px solid #a70000ff", 
-                        borderRadius: "50%", 
-                        padding: "10px", 
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginLeft: "15px",
-                        marginTop: "40px"
-                    }}
-                    title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
-                  >
-                    {isWishlisted ? (
-                        <HeartIconSolid style={{ height: "24px", width: "24px", color: "red" }} />
-                    ) : (
-                        <HeartIconOutline style={{ height: "24px", width: "24px", color: "darkgray" }} />
-                    )}
-                  </button>
+                {isLoggedIn && (
+                    <button 
+                        onClick={handleToggleWishlist}
+                        style={{
+                            background: "none", 
+                            border: "1px solid #a70000ff", 
+                            borderRadius: "50%", 
+                            padding: "10px", 
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginLeft: "15px",
+                            marginTop: "40px"
+                        }}
+                        title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+                    >
+                        {isWishlisted ? (
+                            <HeartIconSolid style={{ height: "24px", width: "24px", color: "red" }} />
+                        ) : (
+                            <HeartIconOutline style={{ height: "24px", width: "24px", color: "darkgray" }} />
+                        )}
+                    </button>
+                  )}
               </div>
               
               <div className="book-meta-details" style={{ marginBottom: "20px" }}>

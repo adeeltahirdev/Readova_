@@ -73,9 +73,11 @@ const UserManagement = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("adminAuth");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userId");
     setIsLoggedIn(false);
     toast.info("Logged out successfully!");
-    setTimeout(() => (window.location.href = "/"), 1000);
+    setTimeout(() => (window.location.href = "/"), 5000);
   };
 
   if (!isLoggedIn) return null;

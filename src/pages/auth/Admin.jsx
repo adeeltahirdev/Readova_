@@ -41,6 +41,8 @@ const Admin = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("adminAuth");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userId");
     setIsLoggedIn(false);
     window.location.href = "/";
   };
