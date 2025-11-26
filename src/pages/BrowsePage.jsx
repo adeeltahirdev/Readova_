@@ -188,7 +188,6 @@ const BrowsePage = () => {
                     value={cat}
                     checked={filters.categories.includes(cat)}
                     onChange={handleFilterChange}
-                    checked={filters.categories.includes(cat)}
                   />
                   {cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </label>
@@ -208,7 +207,6 @@ const BrowsePage = () => {
                   value={r}
                   checked={filters.rating.includes(String(r))}
                   onChange={handleFilterChange}
-                  checked={filters.rating.includes(r.toString())}
                 />
                 {"⭐".repeat(r)} ({r}+)
               </label>
@@ -224,7 +222,6 @@ const BrowsePage = () => {
                 value="0-10"
                 checked={filters.price.includes("0-10")}
                 onChange={handleFilterChange}
-                checked={filters.price.includes("0-10")}
               />
               Under $10
             </label>
@@ -235,7 +232,6 @@ const BrowsePage = () => {
                 value="10-20"
                 checked={filters.price.includes("10-20")}
                 onChange={handleFilterChange}
-                checked={filters.price.includes("10-20")}
               />
               $10 - $20
             </label>
@@ -246,7 +242,6 @@ const BrowsePage = () => {
                 value="20+"
                 checked={filters.price.includes("20+")}
                 onChange={handleFilterChange}
-                checked={filters.price.includes("20+")}
               />
               Over $20
             </label>
