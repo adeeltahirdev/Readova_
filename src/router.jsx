@@ -4,7 +4,7 @@ import BrowsePage from "./pages/BrowsePage";
 import LibraryPage from "./pages/LibraryPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import BorrowCheckout from "./pages/BorrowCheckout";
-import SubscribedCheckout from "./pages/SubscribedCheckout";
+import SubscriptionCheckout from "./pages/SubscriptionCheckout";
 import BookDetail from "./pages/BookDetail";
 import Pricing from "./pages/Pricing";
 import Preview from "./pages/PreviewBook";
@@ -58,7 +58,7 @@ const Router = () => {
         path="/subscribedcheckout"
         element={
           <PrivateRoute>
-            <SubscribedCheckout />
+            <SubscriptionCheckout />
           </PrivateRoute>
         }
       />

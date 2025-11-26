@@ -1,0 +1,182 @@
+.checkout-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: calc(100vh - 120px);
+}
+.checkout-left, .checkout-right {
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+.checkout-header {
+    margin-bottom: 20px;
+}
+.checkout-header h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 1.5rem;
+}
+.checkout-header p {
+    margin: 5px 0 0;
+    color: #6b7280;
+}
+
+/* Search Box Styling */
+.search-box {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    outline: none;
+    background: #f9fafb;
+}
+.search-box:focus {
+    border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* Scrollable List Area */
+.book-list-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+.book-list-scroll::-webkit-scrollbar { width: 6px; }
+.book-list-scroll::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+.book-list-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+
+/* Book Card Styling */
+.book-detail {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.book-detail:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-color: #d1d5db;
+}
+.book-detail.selected {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+}
+.book-image {
+    width: 45px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.book-info-text {
+    flex: 1;
+}
+.book-info-text h3 {
+    font-size: 0.95rem;
+    margin: 0 0 4px 0;
+    color: #111827;
+    font-weight: 600;
+}
+.book-info-text p {
+    font-size: 0.85rem;
+    margin: 0;
+    color: #6b7280;
+}
+
+/* Add Button */
+.add-button {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    font-size: 0.9rem;
+}
+.add-button:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+.add-button:disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Remove Button */
+.remove-button {
+    background: #fff;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+.remove-button:hover {
+    background: #fee2e2;
+    color: #dc2626;
+    border-color: #fca5a5;
+}
+
+/* Checkout Button */
+.checkout-button {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.checkout-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3);
+}
+.checkout-button:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+@media (max-width: 768px) {
+    .checkout-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    .book-list-scroll {
+        max-height: 400px;
+    }
+}

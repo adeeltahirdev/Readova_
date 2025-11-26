@@ -12,26 +12,17 @@ import {
 } from "@heroicons/react/24/outline";
 import Logo from "../../src/assets/images/Logo.png";
 import "../../src/assets/css/preview.css";
-
 const PreviewBook = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [previewAccess, setPreviewAccess] = useState(false);
-  
-  // Rating State
-  const [rating, setRating] = useState(0); 
+  const [rating, setRating] = useState(0);
   const [savedPage, setSavedPage] = useState(null);
-
-  // Get User ID
   const userId = localStorage.getItem("userId") || localStorage.getItem("id");
-
   const iframeRef = useRef(null);
-
-  /* ======================== LOAD BOOK ======================== */
   useEffect(() => {
     const fetchBook = async () => {
       try {
@@ -39,6 +30,15 @@ const PreviewBook = () => {
         if (data?.book) {
           setBook(data.book);
           setPreviewAccess(data.preview_access ?? false);
+          localStorage.setItem(
+            "recentBook",
+            JSON.stringify({
+              id: data.book.id,
+              title: data.book.title,
+              authors: data.book.authors,
+              thumbnail: data.book.thumbnail,
+            })
+          );
         } else {
           toast.error("Book not found");
           navigate(-1);
@@ -54,14 +54,10 @@ const PreviewBook = () => {
 
     if (id) fetchBook();
   }, [id, navigate, userId]);
-
-  /* ======================== LOAD BOOKMARK ONLY ======================== */
   useEffect(() => {
     const saved = localStorage.getItem(`bookmark_${id}`);
     if (saved) setSavedPage(Number(saved));
   }, [id]);
-
-  /* ======================== TOGGLE FULLSCREEN ======================== */
   const toggleFullscreen = async () => {
     try {
       if (!document.fullscreenElement) {
@@ -75,8 +71,6 @@ const PreviewBook = () => {
       console.error("Fullscreen error:", err);
     }
   };
-
-  /* ======================== BOOKMARK (LOCAL) ======================== */
   const saveBookmark = () => {
     const iframe = iframeRef.current;
     if (!iframe) return;
@@ -94,30 +88,26 @@ const PreviewBook = () => {
       { once: true }
     );
   };
-
-  /* ======================== STAR RATING (DB API) ======================== */
   const handleRating = async (value) => {
     if (!userId) {
-        toast.error("You must be logged in to rate.");
-        return;
+      toast.error("You must be logged in to rate.");
+      return;
     }
     setRating(value);
 
     try {
-        await api.post('/rate', {
-            user_id: userId,
-            book_id: id,
-            rating: value
-        });
-        toast.success(`You rated this book ${value} stars`);
+      await api.post("/rate", {
+        user_id: userId,
+        book_id: id,
+        rating: value,
+      });
+      toast.success(`You rated this book ${value} stars`);
     } catch (err) {
-        console.error(err);
-        toast.error("Failed to save rating");
-        setRating(0);
+      console.error(err);
+      toast.error("Failed to save rating");
+      setRating(0);
     }
   };
-
-  /* ======================== RENDER ======================== */
   if (loading) {
     return (
       <div className="preview-loading">
@@ -158,22 +148,23 @@ const PreviewBook = () => {
         </div>
 
         <div className="header-right">
-          {/* ⭐ STAR RATING */}
           {[1, 2, 3, 4, 5].map((s) => (
             <StarIcon
               key={s}
               onClick={() => handleRating(s)}
               className="icon"
-              style={{ color: s <= rating ? "yellow" : "white", cursor: "pointer" }}
+              style={{
+                color: s <= rating ? "yellow" : "white",
+                cursor: "pointer",
+              }}
             />
           ))}
-
-          {/* 🔖 BOOKMARK */}
-          <button onClick={saveBookmark} className="icon-btn" title="Bookmark page">
+          <button
+            onClick={saveBookmark}
+            className="icon-btn"
+            title="Bookmark page">
             <BookmarkIcon className="icon" />
           </button>
-
-          {/* FULLSCREEN */}
           {hasGooglePreview && (
             <button onClick={toggleFullscreen} className="icon-btn">
               {isFullscreen ? (
@@ -200,21 +191,20 @@ const PreviewBook = () => {
           <div className="preview-locked">
             <h2>Preview Locked</h2>
             <p>You need to borrow this book to view the full preview.</p>
-            <button 
-                onClick={() => navigate(`/borrowcheckout/${id}`)}
-                className="borrow-btn"
-                style={{
-                    marginTop: "20px",
-                    padding: "10px 20px",
-                    fontSize: "16px",
-                    cursor: "pointer",
-                    backgroundColor: "#007bff",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px"
-                }}
-            >
-                Go to Borrow Page
+            <button
+              onClick={() => navigate(`/borrowcheckout/${id}`)}
+              className="borrow-btn"
+              style={{
+                marginTop: "20px",
+                padding: "10px 20px",
+                fontSize: "16px",
+                cursor: "pointer",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+              }}>
+              Go to Borrow Page
             </button>
           </div>
         )}

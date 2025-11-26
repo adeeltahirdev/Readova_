@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactPaginate from "react-paginate";
 import api from "../../api/axios";
 import MainLayout from "../layouts/MainLayout.jsx";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router-dom";
 
 const BrowsePage = () => {
+  const [searchParams] = useSearchParams();
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -13,11 +14,12 @@ const BrowsePage = () => {
     rating: [],
     price: [],
     availability: [],
+    searchQuery: "" 
   });
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 12;
-
+  const visibleCategories = ["fiction", "non-fiction", "mystery", "fantasy", "sci-fi"];
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -26,16 +28,13 @@ const BrowsePage = () => {
           id: book.id,
           title: book.title,
           author: book.authors,
-          rating: book.rating || "",
+          rating: book.rating || 0,
           categories: book.categories || "Unknown",
-          price: book.price || "",
+          price: book.price || 0,
           availability: book.availability || "",
-          img:
-            book.thumbnail ||
-            "https://via.placeholder.com/150x220?text=No+Image",
+          img: book.thumbnail || "https://via.placeholder.com/150x220?text=No+Image",
         }));
 
-        //  Category grouping map
         const categoryGroups = {
           fiction: ["fiction", "novel", "literature", "drama"],
           "non-fiction": ["non-fiction", "biography", "history", "self-help", "education"],
@@ -44,34 +43,44 @@ const BrowsePage = () => {
           "sci-fi": ["sci-fi", "science fiction", "space", "technology", "future"],
         };
 
-        //  Function to normalize book category
         const mapToMainCategory = (cat) => {
-          const normalized = cat.toLowerCase();
+          const normalized = (cat || "").toLowerCase();
           for (const [main, keywords] of Object.entries(categoryGroups)) {
             if (keywords.some((k) => normalized.includes(k))) return main;
           }
-          return "fiction"; // default fallback
+          return "fiction";
         };
-
-        //  Assign grouped categories to each book
         const groupedBooks = apiBooks.map((b) => ({
           ...b,
           categories: mapToMainCategory(b.categories),
         }));
 
-        // Show only 5 filters in sidebar
-        const visibleCategories = ["fiction", "non-fiction", "mystery", "fantasy", "sci-fi"];
-
         setBooks(groupedBooks);
-        setFilteredBooks(groupedBooks);
         setCategories(visibleCategories);
+        const queryQ = searchParams.get("q");
+        let initialFilters = {
+             categories: [],
+             rating: [],
+             price: [],
+             availability: [],
+             searchQuery: ""
+        };
+        if (queryQ) {
+            const lowerQ = queryQ.toLowerCase();
+            if (visibleCategories.includes(lowerQ)) {
+                initialFilters.categories = [lowerQ];
+            } else {
+                initialFilters.searchQuery = lowerQ;
+            }
+        }
+        setFilters(initialFilters);
+        filterAndSort(groupedBooks, initialFilters, sortBy);
       } catch (err) {
         console.error("Error fetching books:", err);
       }
     };
     fetchBooks();
-  }, []);
-
+  }, [searchParams]);
   const handleFilterChange = (e) => {
     const { name, value, checked } = e.target;
     setFilters((prevFilters) => {
@@ -83,110 +92,85 @@ const BrowsePage = () => {
   };
 
   const handleSortChange = (e) => {
-    setSortBy(e.target.value);
+    const newSort = e.target.value;
+    setSortBy(newSort);
+    const sorted = sortBooks(filteredBooks, newSort);
+    setFilteredBooks(sorted);
   };
-
-  // Apply filters and sorting
-  const applyFiltersAndSorting = () => {
-    let result = books;
-
-    // Apply filters
-    if (filters.categories.length > 0) {
-      result = result.filter((book) =>
-        filters.categories.includes(book.categories)
-      );
-    }
-
-    if (filters.rating.length > 0) {
-      result = result.filter((book) =>
-        filters.rating.some((r) => book.rating >= parseInt(r))
-      );
-    }
-
-    if (filters.price.length > 0) {
-      result = result.filter((book) => {
-        return filters.price.some((priceRange) => {
-          if (priceRange === "0-10") return book.price < 10;
-          if (priceRange === "10-20")
-            return book.price >= 10 && book.price <= 20;
-          if (priceRange === "20+") return book.price > 20;
-          return false;
+  const filterAndSort = (sourceBooks, currentFilters, currentSort) => {
+      let result = sourceBooks;
+      if (currentFilters.categories.length > 0) {
+        result = result.filter((book) =>
+          currentFilters.categories.includes(book.categories)
+        );
+      }
+      if (currentFilters.rating.length > 0) {
+        result = result.filter((book) =>
+          currentFilters.rating.some((r) => book.rating >= parseInt(r))
+        );
+      }
+      if (currentFilters.price.length > 0) {
+        result = result.filter((book) => {
+          return currentFilters.price.some((priceRange) => {
+            if (priceRange === "0-10") return book.price < 10;
+            if (priceRange === "10-20") return book.price >= 10 && book.price <= 20;
+            if (priceRange === "20+") return book.price > 20;
+            return false;
+          });
         });
-      });
-    }
-
-    if (filters.availability.length > 0) {
-      result = result.filter((book) =>
-        filters.availability.includes(book.availability)
-      );
-    }
-
-    // Apply sorting
-    result = sortBooks(result, sortBy);
-
-    setFilteredBooks(result);
-    setCurrentPage(0);
+      }
+      if (currentFilters.searchQuery) {
+          const q = currentFilters.searchQuery.toLowerCase();
+          result = result.filter(book => 
+              book.title.toLowerCase().includes(q) || 
+              book.author.toLowerCase().includes(q)
+          );
+      }
+      result = sortBooks(result, currentSort);
+      setFilteredBooks(result);
+      setCurrentPage(0);
   };
 
   const sortBooks = (booksToSort, sortType) => {
     const sortedBooks = [...booksToSort];
-    
     switch (sortType) {
       case "newest":
-        // Assuming newer books have higher IDs - adjust based on your data
         return sortedBooks.sort((a, b) => b.id - a.id);
-      
       case "price-low":
-        return sortedBooks.sort((a, b) => (a.price || 0) - (b.price || 0));
-      
+        return sortedBooks.sort((a, b) => a.price - b.price);
       case "price-high":
-        return sortedBooks.sort((a, b) => (b.price || 0) - (a.price || 0));
-      
+        return sortedBooks.sort((a, b) => b.price - a.price);
       case "popularity":
-        // Assuming higher rating means more popular - adjust based on your data
-        return sortedBooks.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-      
+        return sortedBooks.sort((a, b) => b.rating - a.rating);
       default:
         return sortedBooks;
     }
   };
 
   const handleApplyFilters = () => {
-    applyFiltersAndSorting();
+    filterAndSort(books, filters, sortBy);
   };
 
   const handleReset = () => {
-    setFilters({
+    const resetFilters = {
       categories: [],
       rating: [],
       price: [],
       availability: [],
-    });
+      searchQuery: ""
+    };
+    setFilters(resetFilters);
     setSortBy("newest");
-    setFilteredBooks(books);
-    setCurrentPage(0);
-    document
-      .querySelectorAll('.filters input[type="checkbox"]')
-      .forEach((cb) => (cb.checked = false));
-    // Reset sort dropdown to default
-    const sortSelect = document.getElementById("sort-by");
-    if (sortSelect) sortSelect.value = "newest";
+    filterAndSort(books, resetFilters, "newest");
   };
-
-  // Apply sorting when sort option changes
-  useEffect(() => {
-    applyFiltersAndSorting();
-  }, [sortBy]);
 
   const pageCount = Math.ceil(filteredBooks.length / itemsPerPage);
   const startOffset = currentPage * itemsPerPage;
-  const currentItems = filteredBooks.slice(
-    startOffset,
-    startOffset + itemsPerPage
-  );
+  const currentItems = filteredBooks.slice(startOffset, startOffset + itemsPerPage);
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -204,6 +188,7 @@ const BrowsePage = () => {
                     type="checkbox"
                     name="categories"
                     value={cat}
+                    checked={filters.categories.includes(cat)}
                     onChange={handleFilterChange}
                   />
                   {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -222,6 +207,7 @@ const BrowsePage = () => {
                   type="checkbox"
                   name="rating"
                   value={r}
+                  checked={filters.rating.includes(String(r))}
                   onChange={handleFilterChange}
                 />
                 {"⭐".repeat(r)} ({r}+)
@@ -236,6 +222,7 @@ const BrowsePage = () => {
                 type="checkbox"
                 name="price"
                 value="0-10"
+                checked={filters.price.includes("0-10")}
                 onChange={handleFilterChange}
               />
               Under $10
@@ -245,6 +232,7 @@ const BrowsePage = () => {
                 type="checkbox"
                 name="price"
                 value="10-20"
+                checked={filters.price.includes("10-20")}
                 onChange={handleFilterChange}
               />
               $10 - $20
@@ -254,33 +242,12 @@ const BrowsePage = () => {
                 type="checkbox"
                 name="price"
                 value="20+"
+                checked={filters.price.includes("20+")}
                 onChange={handleFilterChange}
               />
               Over $20
             </label>
           </div>
-
-          {/* <div className="filter-group">
-            <h4>Availability</h4>
-            <label>
-              <input
-                type="checkbox"
-                name="availability"
-                value="available"
-                onChange={handleFilterChange}
-              />
-              Available Now
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="availability"
-                value="preorder"
-                onChange={handleFilterChange}
-              />
-              Pre-Order
-            </label>
-          </div> */}
 
           <button className="btn-apply" onClick={handleApplyFilters}>
             Apply Filters
@@ -291,7 +258,14 @@ const BrowsePage = () => {
         </aside>
         <main className="book-listing">
           <div className="listing-header">
-            <h2>All Books</h2>
+            <h2>
+                {filters.categories.length > 0 
+                    ? `Genre: ${filters.categories.join(", ")}` 
+                    : filters.searchQuery 
+                        ? `Search: "${filters.searchQuery}"`
+                        : "All Books"
+                }
+            </h2>
             <div className="sort-options">
               <label>Sort By:</label>
               <select id="sort-by" onChange={handleSortChange} value={sortBy}>
@@ -322,7 +296,10 @@ const BrowsePage = () => {
             ))}
 
             {currentItems.length === 0 && (
-              <p>No books match the selected filters.</p>
+              <div style={{gridColumn: "1 / -1", textAlign: "center", padding: "40px"}}>
+                <p>No books match the selected filters.</p>
+                <button onClick={handleReset} style={{marginTop: "10px", color: "blue", background: "none", border: "underline", cursor: "pointer"}}>Clear all filters</button>
+              </div>
             )}
           </div>
 

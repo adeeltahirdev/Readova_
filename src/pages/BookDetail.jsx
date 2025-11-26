@@ -3,6 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import api from "../../api/axios";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 
 const BookDetail = () => {
   const { id } = useParams();
@@ -12,7 +15,8 @@ const BookDetail = () => {
   const [randomBooks, setRandomBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const [isBorrowed, setIsBorrowed] = useState(false);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const userId = localStorage.getItem("userId") || localStorage.getItem("id");
   const isLoggedIn = !!userId;
 
@@ -23,7 +27,15 @@ const BookDetail = () => {
         const res = await api.get(`/books/${id}?user_id=${userId}`);
         const bookData = res.data.book || res.data;
         setBook(bookData);
-        setIsBorrowed(res.data.preview_access || false);
+        setHasAccess(res.data.preview_access || false);
+        if (isLoggedIn) {
+            try {
+                const wishRes = await api.get(`/wishlist/check/${id}?user_id=${userId}`);
+                setIsWishlisted(wishRes.data.is_wishlisted);
+            } catch (wErr) {
+                console.error("Wishlist check failed", wErr);
+            }
+        }
         const allRes = await api.get("/showbooks");
         const allBooks = allRes.data.books || allRes.data;
         const filtered = allBooks.filter((b) => b.id !== bookData.id);
@@ -32,13 +44,37 @@ const BookDetail = () => {
         
       } catch (err) {
         console.error("Error fetching book:", err);
+        toast.error("Failed to load book data");
       } finally {
         setLoading(false);
       }
     };
 
     if (id) fetchBookData();
-  }, [id, userId]);
+  }, [id, userId, isLoggedIn]);
+  const handleToggleWishlist = async () => {
+      if (!isLoggedIn) {
+          toast.info("Please login to save to wishlist");
+          return;
+      }
+      try {
+          const response = await api.post('/wishlist/toggle', {
+              user_id: userId,
+              book_id: id
+          });
+          const isAdded = response.data.status === 'added';
+          setIsWishlisted(isAdded);
+          if(isAdded) {
+              toast.success("Added to wishlist");
+          } else {
+              toast.info("Removed from wishlist");
+          }
+      } catch (error) {
+          console.error(error);
+          toast.error("Failed to update wishlist");
+      }
+  };
+
   const renderDescription = () => {
     const desc = book.description || "No description available.";
     const cleanDesc = desc.replace(/<[^>]*>?/gm, '');
@@ -101,12 +137,39 @@ const BookDetail = () => {
                 src={book.thumbnail || "https://via.placeholder.com/200x300?text=No+Image"}
                 alt={book.title}
                 className="book-cover-large"
+                style={{marginTop:"10px"}}
               />
             </div>
 
             <div className="book-info-main">
-              <h1 className="heading-primary">{book.title}</h1>
-              <p className="book-author">By {book.authors}</p>
+              <div style={{display: "flex", justifyContent: "space-between", alignItems: "start"}}>
+                  <div>
+                    <h1 className="heading-primary" style={{marginBottom: "5px"}}>{book.title}</h1>
+                    <p className="book-author">By {book.authors}</p>
+                  </div>
+                  <button 
+                    onClick={handleToggleWishlist}
+                    style={{
+                        background: "none", 
+                        border: "1px solid #a70000ff", 
+                        borderRadius: "50%", 
+                        padding: "10px", 
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginLeft: "15px",
+                        marginTop: "40px"
+                    }}
+                    title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+                  >
+                    {isWishlisted ? (
+                        <HeartIconSolid style={{ height: "24px", width: "24px", color: "red" }} />
+                    ) : (
+                        <HeartIconOutline style={{ height: "24px", width: "24px", color: "darkgray" }} />
+                    )}
+                  </button>
+              </div>
               
               <div className="book-meta-details" style={{ marginBottom: "20px" }}>
                  <span className="badge-category">{book.categories || "General"}</span>
@@ -116,23 +179,23 @@ const BookDetail = () => {
               </div>
 
               <div className="book-actions">
-                {!isBorrowed && (
-                    <Link to={`/borrowcheckout/${book.id}`}
-                    className="btn btn-outline subscribe-btn"
-                    >
-                    Borrow Book
-                    </Link>
-                )}
-                <Link to="/pricing" className="btn btn-outline subscribe-btn">
-                  Subscribe Plan
-                </Link>
-                {isLoggedIn && isBorrowed && (
-                  <Link
+                {hasAccess && isLoggedIn ? (
+                    <Link
                     to={`/preview/${book.id}`}
                     className="btn btn-outline"
+                    style={{backgroundColor: '#28a745', color: 'white', borderColor: '#28a745'}}
                   >
                     Read Book
                   </Link>
+                ) : (
+                    <>
+                        <Link to={`/borrowcheckout/${book.id}`} className="btn btn-outline subscribe-btn">
+                            Borrow Book
+                        </Link>
+                        <Link to="/pricing" className="btn btn-outline subscribe-btn">
+                            Subscribe Plan
+                        </Link>
+                    </>
                 )}
               </div>
 
@@ -142,6 +205,7 @@ const BookDetail = () => {
               </div>
             </div>
           </section>
+
           <section className="book-stats">
             <div className="stat-item">
               <span className="stat-number">{book.page_count || "N/A"}</span>
@@ -156,6 +220,7 @@ const BookDetail = () => {
               <span className="stat-label">Rating</span>
             </div>
           </section>
+
           <section className="similar-books">
             <h2 className="heading-secondary">You may also like</h2>
             <div className="similar-books-grid">
