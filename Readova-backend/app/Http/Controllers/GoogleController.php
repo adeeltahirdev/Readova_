@@ -169,15 +169,12 @@ class GoogleController extends Controller
     public function show(Request $request)
     {
         $query = $request->input('q');
-        $limit = $request->input('limit', 50);
-
         $books = Books::query()
             ->when($query, function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                     ->orWhere('authors', 'like', "%{$query}%")
                     ->orWhere('categories', 'like', "%{$query}%");
             })
-            ->limit($limit)
             ->get([
                 'id',
                 'google_id',
