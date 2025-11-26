@@ -21,10 +21,6 @@ const Pricing = () => {
             answer: "Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle."
         },
         {
-            question: "Is there a free trial?",
-            answer: "Yes, we offer a 14-day free trial for both plans. No credit card required to start your trial."
-        },
-        {
             question: "Can I cancel my subscription anytime?",
             answer: "Absolutely. You can cancel your subscription at any time, and you'll continue to have access until the end of your billing period."
         },
@@ -53,11 +49,9 @@ const Pricing = () => {
                             <div className="price-period">per month</div>
                             
                             <ul className="list">
-                                <li className="list-item">Access to 10,000+ popular books</li>
+                                <li className="list-item">Access to 15 books</li>
                                 <li className="list-item">Read on one device at a time</li>
-                                <li className="list-item">Standard quality reading experience</li>
                                 <li className="list-item">Basic customer support</li>
-                                <li className="list-item">Offline reading for up to 5 books</li>
                             </ul>
                             
                             <a 
@@ -81,11 +75,9 @@ const Pricing = () => {
                             <div className="price-period">per month</div>
                             
                             <ul className="list">
-                                <li className="list-item">Unlimited access to 100,000+ books</li>
+                                <li className="list-item">Unlimited access to the books</li>
                                 <li className="list-item">Read on up to 5 devices simultaneously</li>
-                                <li className="list-item">Enhanced reading experience with custom fonts</li>
                                 <li className="list-item">Priority customer support</li>
-                                <li className="list-item">Offline reading for unlimited books</li>
                                 <li className="list-item">Early access to new releases</li>
                                 <li className="list-item">Personalized recommendations</li>
                             </ul>

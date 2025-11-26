@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import api from "../../api/axios";
 import MainLayout from "../layouts/MainLayout.jsx";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 const BrowsePage = () => {
   const [books, setBooks] = useState([]);
@@ -17,6 +17,7 @@ const BrowsePage = () => {
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 12;
+  const location = useLocation();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -71,6 +72,28 @@ const BrowsePage = () => {
     };
     fetchBooks();
   }, []);
+
+  // Handle URL parameters for genre filtering
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const genre = urlParams.get('genre');
+    
+    if (genre && categories.includes(genre)) {
+      // Auto-select the genre filter when coming from navbar
+      setFilters(prev => ({
+        ...prev,
+        categories: [genre]
+      }));
+      
+      // Also check the corresponding checkbox
+      setTimeout(() => {
+        const checkbox = document.querySelector(`input[name="categories"][value="${genre}"]`);
+        if (checkbox) {
+          checkbox.checked = true;
+        }
+      }, 100);
+    }
+  }, [location.search, categories]);
 
   const handleFilterChange = (e) => {
     const { name, value, checked } = e.target;
@@ -171,12 +194,15 @@ const BrowsePage = () => {
     // Reset sort dropdown to default
     const sortSelect = document.getElementById("sort-by");
     if (sortSelect) sortSelect.value = "newest";
+    
+    // Clear URL parameters
+    window.history.replaceState({}, '', '/browse');
   };
 
-  // Apply sorting when sort option changes
+  // Apply sorting when sort option changes or filters change
   useEffect(() => {
     applyFiltersAndSorting();
-  }, [sortBy]);
+  }, [sortBy, filters]);
 
   const pageCount = Math.ceil(filteredBooks.length / itemsPerPage);
   const startOffset = currentPage * itemsPerPage;
@@ -205,6 +231,7 @@ const BrowsePage = () => {
                     name="categories"
                     value={cat}
                     onChange={handleFilterChange}
+                    checked={filters.categories.includes(cat)}
                   />
                   {cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </label>
@@ -223,6 +250,7 @@ const BrowsePage = () => {
                   name="rating"
                   value={r}
                   onChange={handleFilterChange}
+                  checked={filters.rating.includes(r.toString())}
                 />
                 {"⭐".repeat(r)} ({r}+)
               </label>
@@ -237,6 +265,7 @@ const BrowsePage = () => {
                 name="price"
                 value="0-10"
                 onChange={handleFilterChange}
+                checked={filters.price.includes("0-10")}
               />
               Under $10
             </label>
@@ -246,6 +275,7 @@ const BrowsePage = () => {
                 name="price"
                 value="10-20"
                 onChange={handleFilterChange}
+                checked={filters.price.includes("10-20")}
               />
               $10 - $20
             </label>
@@ -255,32 +285,11 @@ const BrowsePage = () => {
                 name="price"
                 value="20+"
                 onChange={handleFilterChange}
+                checked={filters.price.includes("20+")}
               />
               Over $20
             </label>
           </div>
-
-          {/* <div className="filter-group">
-            <h4>Availability</h4>
-            <label>
-              <input
-                type="checkbox"
-                name="availability"
-                value="available"
-                onChange={handleFilterChange}
-              />
-              Available Now
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="availability"
-                value="preorder"
-                onChange={handleFilterChange}
-              />
-              Pre-Order
-            </label>
-          </div> */}
 
           <button className="btn-apply" onClick={handleApplyFilters}>
             Apply Filters
