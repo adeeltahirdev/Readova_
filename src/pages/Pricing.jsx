@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 
 const Pricing = () => {
     const [activeFaq, setActiveFaq] = useState(null);
-
-    // FAQ toggle functionality
+    const navigate = useNavigate();
     const handleFaqToggle = (index) => {
         setActiveFaq(activeFaq === index ? null : index);
     };
-
-    // Button click handlers
     const handlePlanSelect = (planName) => {
-        alert(`Thank you for choosing the ${planName} plan! You'll be redirected to the signup page.`);
-        // In a real implementation, you would redirect to a signup/payment page
+        const type = planName.toLowerCase();
+        localStorage.setItem("planType", type);
+        navigate('/subscribedcheckout');
     };
     
     const faqData = [
@@ -41,7 +40,6 @@ const Pricing = () => {
                     </header>
                     
                     <div className="plans-container grid grid-2-col grid-gap">
-                        {/* Basic Plan */}
                         <div className="plan-card basic">
                             <h2 className="heading-secondary">Basic</h2>
                             <p className="plan-description">Perfect for casual readers who want to explore our library</p>
@@ -65,8 +63,6 @@ const Pricing = () => {
                                 Subscribe
                             </a>
                         </div>
-                        
-                        {/* Premium Plan */}
                         <div className="plan-card popular">
                             <div className="popular-badge">MOST POPULAR</div>
                             <h2 className="heading-secondary">Premium</h2>

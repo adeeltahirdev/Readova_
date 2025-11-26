@@ -12,6 +12,8 @@ const Admin = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalBooks, setTotalBooks] = useState(0);
+  const [activeSubs, setActiveSubs] = useState(0);
+  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
   const [loadingStats, setLoadingStats] = useState(true);
 
   const adminCredentials = {
@@ -26,9 +28,12 @@ const Admin = () => {
     try {
       const usersRes = await axios.get("/allusers");
       setTotalUsers(usersRes.data.users?.length || 0);
-
       const booksRes = await axios.get("/showbooks");
       setTotalBooks(booksRes.data.total || 0);
+      const adminRes = await axios.get("/admin/stats");
+      setActiveSubs(adminRes.data.active_subscriptions || 0);
+      setMonthlyRevenue(adminRes.data.monthly_revenue || 0);
+
     } catch (err) {
       console.error("Error fetching stats:", err);
     }
@@ -139,7 +144,7 @@ const Admin = () => {
                 <i className="fas fa-crown"></i>
               </div>
               <div className="stat-info">
-                <h3 className="stat-number">3,215</h3>
+                <h3 className="stat-number">{activeSubs}</h3>
                 <p className="stat-label">Active Subscriptions</p>
               </div>
             </div>
@@ -149,14 +154,13 @@ const Admin = () => {
                 <i className="fas fa-dollar-sign"></i>
               </div>
               <div className="stat-info">
-                <h3 className="stat-number">$24,580</h3>
+                <h3 className="stat-number">
+                    ${monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </h3>
                 <p className="stat-label">Monthly Revenue</p>
               </div>
             </div>
           </section>
-
-         
-          
         </main>
       </div>
     </AdminLayout>
