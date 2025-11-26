@@ -52,7 +52,7 @@ class GoogleController extends Controller
             if (!empty($bookData['google_id'])) {
                 Books::updateOrCreate(
                     [
-                        'google_id' => $bookData['google_id'], 
+                        'google_id' => $bookData['google_id'],
                         'info_link' => $bookData['infoLink'],
                         'page_count' => $bookData['page_count'],
                         'published_date' => $bookData['publishedDate'],
@@ -116,7 +116,7 @@ class GoogleController extends Controller
                     if ($subscription->plan_type === 'premium') {
                         $previewAccess = true;
                     } elseif ($subscription->plan_type === 'basic') {
-                        $selectedBooks = $subscription->selected_books ?? [];                        
+                        $selectedBooks = $subscription->selected_books ?? [];
                         if (in_array($book->id, $selectedBooks)) {
                             $previewAccess = true;
                         }
@@ -174,8 +174,8 @@ class GoogleController extends Controller
         $books = Books::query()
             ->when($query, function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
-                  ->orWhere('authors', 'like', "%{$query}%")
-                  ->orWhere('categories', 'like', "%{$query}%");
+                    ->orWhere('authors', 'like', "%{$query}%")
+                    ->orWhere('categories', 'like', "%{$query}%");
             })
             ->limit($limit)
             ->get([
@@ -190,7 +190,7 @@ class GoogleController extends Controller
                 'info_link',
                 'page_count',
                 'price',
-            ]);    
+            ]);
         return response()->json([
             'total' => $books->count(),
             'books' => $books,
@@ -214,7 +214,7 @@ class GoogleController extends Controller
 
         $userId = $request->user_id;
         $bookId = $request->book_id;
-        
+
         $wishlist = Wishlist::where('user_id', $userId)
             ->where('book_id', $bookId)
             ->first();
@@ -237,12 +237,12 @@ class GoogleController extends Controller
         if (!$userId) {
             return response()->json(['message' => 'User ID required'], 400);
         }
-        
+
         $wishlists = Wishlist::with('book')
             ->where('user_id', $userId)
             ->orderBy('created_at', 'desc')
             ->get();
-            
+
         $books = $wishlists->map(function ($item) {
             return $item->book;
         });
@@ -255,7 +255,7 @@ class GoogleController extends Controller
     public function checkWishlistStatus(Request $request, $id)
     {
         $userId = $request->query('user_id');
-        
+
         if (!$userId) {
             return response()->json(['is_wishlisted' => false]);
         }
@@ -275,7 +275,7 @@ class GoogleController extends Controller
             ->where('user_id', $userId)
             ->where('expires_at', '>=', $now)
             ->get();
-        $borrowedBooks = $borrowedRecords->map(function($record) {
+        $borrowedBooks = $borrowedRecords->map(function ($record) {
             return $record->book;
         });
         $subscription = Subscription::where('user_id', $userId)
@@ -295,7 +295,7 @@ class GoogleController extends Controller
             'plan_type' => $planType
         ]);
     }
-        public function getNotifications()
+    public function getNotifications()
     {
         $latestBooks = Books::orderBy('created_at', 'desc')
             ->take(5)
@@ -311,6 +311,20 @@ class GoogleController extends Controller
         return response()->json([
             'notifications' => $notifications,
             'count' => $notifications->count()
+        ]);
+    }
+    public function getAdminStats()
+    {
+        $activeSubs = Subscription::where('expiry_date', '>', Carbon::now())->count();
+        $subRevenue = Subscription::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->sum('price');
+        $borrowRevenue = Borrow::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->sum('price');
+        return response()->json([
+            'active_subscriptions' => $activeSubs,
+            'monthly_revenue' => $subRevenue + $borrowRevenue
         ]);
     }
 }

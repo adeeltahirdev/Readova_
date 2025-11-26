@@ -35,3 +35,4 @@ Route::get('/wishlist/check/{id}', [GoogleController::class, 'checkWishlistStatu
 Route::get('/library/my-books', [GoogleController::class, 'getMyLibrary']);
 
 Route::get('/notifications', [GoogleController::class, 'getNotifications']);
+Route::get('/admin/stats', [GoogleController::class, 'getAdminStats']);
