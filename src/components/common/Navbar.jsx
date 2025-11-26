@@ -91,6 +91,18 @@ const Navbar = () => {
       }
   };
 
+  const handleUserIconClick = () => {
+    if (!isLoggedIn) {
+      navigate("/auth/register");
+      closeMobileMenu();
+    }
+  };
+
+  const handleGenreClick = (genre) => {
+    navigate(`/browse?genre=${genre}`);
+    closeMobileMenu();
+  };
+
   return (
     <>
       <nav className="navbar font-one">
@@ -156,7 +168,6 @@ const Navbar = () => {
                   </span>
               )}
             </div>
-
             {showNotifications && (
                 <div className="notification-dropdown" style={{display: 'block'}}>
                 <div className="notification-header">
@@ -216,6 +227,9 @@ const Navbar = () => {
              <Link to="/auth/login" className="btn-login" style={{textDecoration:'none', color: '#333', fontWeight: 'bold', marginLeft: '10px'}}>
                 Login
              </Link>
+            <div className="user-icon-wrapper" onClick={handleUserIconClick}>
+              <MdPerson2 className="log-icon" style={{ cursor: "pointer" }} />
+            </div>
           )}
           <button className="btn-mobile-nav" onClick={toggleMobileMenu}>
             {isMobileMenuOpen ? (
@@ -247,11 +261,16 @@ const Navbar = () => {
                 Browse All
               </Link>
             </li>
-            <li>
-              <Link to="/library" onClick={closeMobileMenu}>
-                My Library
-              </Link>
-            </li>
+            
+            {/* Show library link only when logged in */}
+            {isLoggedIn && (
+              <li>
+                <Link to="/library" onClick={closeMobileMenu}>
+                  My Library
+                </Link>
+              </li>
+            )}
+            
             <li>
               <Link to="/pricing" onClick={closeMobileMenu}>
                 Pricing
@@ -272,21 +291,54 @@ const Navbar = () => {
                 <Link to="/browse?q=fantasy" onClick={closeMobileMenu}>
                   Fantasy
                 </Link>
+                <Link to="/browse?genre=sci-fi" onClick={closeMobileMenu}>
+                  Sci-Fi
+                </Link>
               </div>
             </li>
           </ul>
-          {isLoggedIn && (
-            <div className="mobile-nav-actions">
-              <div className="mobile-notification" onClick={() => alert("Please check desktop view for notifications")}>
-                <MdNotifications className="mobile-icon" />
-                <span>Notifications ({notifications.length})</span>
+          {/* Mobile Bottom Section */}
+          <div className="mobile-nav-actions">
+            <div className="mobile-notification">
+              <MdNotifications className="mobile-icon" />
+              <span>Notifications</span>
+            </div>
+            <div className="mobile-user-dropdown">
+              <div
+                className="mobile-account"
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    navigate("/auth/register");
+                    closeMobileMenu();
+                  } else {
+                    setIsMobileUserMenuOpen((prev) => !prev);
+                  }
+                }}>
+                <MdPerson2 className="mobile-icon" />
+                <span>{isLoggedIn ? (username || "Account") : "Account"}</span>
               </div>
-              <div className="mobile-user-dropdown">
-                <div
-                  className="mobile-account"
-                  onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}>
-                  <MdPerson2 className="mobile-icon" />
-                  <span>{username || "Account"}</span>
+              {isLoggedIn && isMobileUserMenuOpen && (
+                <div className="mobile-user-dropdown-menu">
+                  <ul>
+                    <li>
+                      <span className="username-display">{username}</span>
+                    </li>
+                    <li>
+                      <Link to="/library" onClick={closeMobileMenu}>
+                        My Library
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/settings" onClick={closeMobileMenu}>
+                        Subscription
+                      </Link>
+                    </li>
+                    <li>
+                      <button className="logout-btn" onClick={handleLogout}>
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
                 </div>
                 {isMobileUserMenuOpen && (
                   <div className="mobile-user-dropdown-menu">
@@ -314,7 +366,7 @@ const Navbar = () => {
                 )}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </>

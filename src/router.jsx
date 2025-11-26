@@ -12,6 +12,8 @@ import Admin from "./pages/auth/Admin";
 import Books from "./pages/auth/BooksManagement";
 import User from "./pages/auth/UserManagement";
 import PrivateRoute from "./components/common/PrivateRoute";
+import Aboutus from "./pages/Aboutus";
+import Contactus from "./pages/Contactus";
 
 const Router = () => {
   return (
@@ -21,6 +23,8 @@ const Router = () => {
       <Route path="/browse" element={<BrowsePage />} />
       <Route path="/book/:id" element={<BookDetail />} />
       <Route path="/preview/:id" element={<Preview />} />
+      <Route path="/aboutus" element={<Aboutus />} />
+      <Route path="/contactus" element={<Contactus />} />
       <Route
         path="/auth/register"
         element={

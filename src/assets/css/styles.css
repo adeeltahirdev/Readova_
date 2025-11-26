@@ -2252,3 +2252,421 @@ body.nav-open .btn-mobile-nav .close-icon {
     padding: 2rem 1.6rem;
   }
 }
+
+/* ******************* */
+/* About Page Styles */
+/* ******************* */
+
+.about-hero-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 3rem;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.placeholder-content h3 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.placeholder-content p {
+  font-size: 1.6rem;
+  opacity: 0.9;
+}
+
+.about-text {
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.about-values {
+  background: #f8f9fa;
+  padding: 3rem;
+  border-radius: 12px;
+  border-left: 4px solid #001f59;
+}
+
+.about-values .heading-tertiary {
+  color: #001f59;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+/* Features Section */
+.about-features {
+  background: #f8f9fa;
+  padding: 6rem 0;
+}
+
+.feature-card {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
+.feature-text {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Team Section */
+.about-team {
+  padding: 6rem 0;
+}
+
+.team-description {
+  font-size: 1.8rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto 4rem;
+}
+
+.team-member {
+  text-align: center;
+  padding: 2rem;
+}
+
+.member-avatar {
+  font-size: 6rem;
+  margin-bottom: 1.5rem;
+}
+
+.member-name {
+  font-size: 2rem;
+  color: #001f59;
+  margin-bottom: 0.5rem;
+}
+
+.member-role {
+  font-size: 1.4rem;
+  color: #66799b;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.member-bio {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+
+
+/* CTA Section */
+.about-cta {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.cta-content .heading-secondary {
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.cta-description {
+  font-size: 1.8rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .about-hero-placeholder {
+    height: 200px;
+    padding: 2rem;
+  }
+  
+  .placeholder-content h3 {
+    font-size: 2rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .stat-number {
+    font-size: 2.8rem;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cta-buttons .btn {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-values {
+    padding: 2rem;
+  }
+  
+  .feature-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ******************* */
+/* Contact Page Styles */
+/* ******************* */
+
+.contact-hero-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 3rem;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.placeholder-content h3 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.placeholder-content p {
+  font-size: 1.6rem;
+  opacity: 0.9;
+}
+
+/* Contact Methods */
+.contact-methods {
+  padding: 4rem 0;
+  background: #f8f9fa;
+}
+
+.contact-method {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.method-icon {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
+.method-info {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #001f59;
+  margin-bottom: 1rem;
+}
+
+.method-description {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Contact Form */
+.contact-form-section {
+  padding: 3rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form {
+  margin-top: 2rem;
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #001f59;
+  margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 1.2rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  font-family: "Open Sans", sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #001f59;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-submit {
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+/* Contact Information */
+.contact-info-section {
+  padding: 3rem;
+}
+
+.contact-info {
+  margin-bottom: 3rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.info-icon {
+  font-size: 2.4rem;
+  margin-right: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #001f59;
+  margin-bottom: 0.5rem;
+}
+
+.info-text {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Social Links */
+.social-links-contact {
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.social-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-link {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background: white;
+  border: 2px solid #e1e5e9;
+  border-radius: 6px;
+  color: #001f59;
+  text-decoration: none;
+  font-size: 1.4rem;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  border-color: #001f59;
+  background: #001f59;
+  color: white;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contact-hero-placeholder {
+    height: 200px;
+    padding: 2rem;
+  }
+  
+  .contact-form-section,
+  .contact-info-section {
+    padding: 2rem;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .info-icon {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .social-icons {
+    justify-content: center;
+  }
+  
+
+}
+
+@media (max-width: 480px) {
+  
+  .contact-method {
+    padding: 2rem 1.5rem;
+  }
+}
