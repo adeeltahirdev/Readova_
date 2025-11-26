@@ -182,11 +182,8 @@ const Navbar = () => {
           {isLoggedIn ? (
             <div className="user-dropdown-container">
               <div className="user-icon-wrapper">
-                {username ? (
-                    <div style={{fontWeight: 'bold', color: '#555'}}>{username.charAt(0).toUpperCase()}</div>
-                ) : (
-                    <UserIcon className="log-icon" />
-                )}
+                {username || <UserIcon className="log-icon" />
+                }
               </div>
               <div className="user-dropdown">
                 <ul>
@@ -201,7 +198,7 @@ const Navbar = () => {
                   </li>
                   <li>
                     <Link
-                      to="/auth/register"
+                      to="/"
                       onClick={(e) => {
                         e.preventDefault();
                         handleLogout();
@@ -213,8 +210,8 @@ const Navbar = () => {
               </div>
             </div>
           ) : (
-             <Link to="/auth/login" className="btn-login" style={{textDecoration:'none', color: '#333', fontWeight: 'bold', marginLeft: '10px'}}>
-                Login
+             <Link to="/auth/register" className="btn-login">
+                <MdPerson2 className="log-icon"/>
              </Link>
           )}
           <button className="btn-mobile-nav" onClick={toggleMobileMenu}>
