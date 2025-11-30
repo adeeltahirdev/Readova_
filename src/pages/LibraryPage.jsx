@@ -101,10 +101,11 @@ const LibraryPage = () => {
             <h2 className="heading-secondary">{libraryHeading}</h2>
             
             {uniqueDisplayBooks.length === 0 ? (
-                <div style={{textAlign: "center", padding: "20px", color: "#666"}}>
-                    <p>You haven't borrowed or subscribed to any books yet.</p>
+                <div style={{textAlign: "center", padding: "100px", color: "#666"}}>
+                    <p style={{fontSize:"12px"}}>You haven't borrowed or subscribed to any books yet.</p>
                     {planType === 'premium' && <p>You have Premium! Go to any book and read it instantly.</p>}
-                    <Link to="/books" className="btn-buy" style={{marginTop: "10px", display: "inline-block"}}>Browse Library</Link>
+                    <Link to="/browse" className="btn btn-full">Browse Books</Link>
+                    <Link to="/pricing" className="btn btn-outline btn-library">Subscribed Plan</Link>
                 </div>
             ) : (
                 <div className="book-cards">
