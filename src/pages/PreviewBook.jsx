@@ -24,33 +24,35 @@ const PreviewBook = () => {
   const userId = localStorage.getItem("userId") || localStorage.getItem("id");
   const iframeRef = useRef(null);
   useEffect(() => {
-    const fetchBook = async () => {
-      try {
-        const { data } = await api.get(`/books/${id}?user_id=${userId}`);
-        if (data?.book) {
-          setBook(data.book);
-          setPreviewAccess(data.preview_access ?? false);
-          localStorage.setItem(
-            "recentBook",
-            JSON.stringify({
-              id: data.book.id,
-              title: data.book.title,
-              authors: data.book.authors,
-              thumbnail: data.book.thumbnail,
-            })
-          );
-        } else {
-          toast.error("Book not found");
-          navigate(-1);
-        }
-      } catch (err) {
-        console.error(err);
-        toast.error(err.response?.data?.message || "Failed to load book");
-        navigate(-1);
-      } finally {
-        setLoading(false);
+const fetchBook = async () => {
+  try {
+    const { data } = await api.get(`/books/${id}?user_id=${userId}`);
+    if (data?.book) {
+      setBook(data.book);
+      setPreviewAccess(data.preview_access ?? false);
+      if (userId) {
+        localStorage.setItem(
+          `recentBook_${userId}`,
+          JSON.stringify({
+            id: data.book.id,
+            title: data.book.title,
+            authors: data.book.authors,
+            thumbnail: data.book.thumbnail,
+          })
+        );
       }
-    };
+    } else {
+      toast.error("Book not found");
+      navigate(-1);
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error(err.response?.data?.message || "Failed to load book");
+    navigate(-1);
+  } finally {
+    setLoading(false);
+  }
+};
 
     if (id) fetchBook();
   }, [id, navigate, userId]);
