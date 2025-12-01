@@ -204,7 +204,7 @@ const IndexPage = () => {
                               <div className="rating">{generateStars(book.rating)}</div>
                             </li>
                             <li className="hm-attribute">
-                              <div className="price">${book.price}</div>
+                              <div className="price">PKR {book.price}</div>
                             </li>
                           </ul>
                           <a href={`/book/${book.id}`} className="btn btn-full btn-view">
@@ -257,7 +257,7 @@ const IndexPage = () => {
                               <div className="rating">{generateStars(book.rating)}</div>
                             </li>
                             <li className="hm-attribute">
-                              <div className="price">${book.price}</div>
+                              <div className="price">PKR {book.price}</div>
                             </li>
                           </ul>
                           <a href={`/book/${book.id}`} className="btn btn-full btn-view">
@@ -307,7 +307,7 @@ const IndexPage = () => {
                       <div className="rating">{generateStars(book.rating)}</div>
                     </li>
                     <li className="hm-attribute">
-                      <div className="price">${book.price}</div>
+                      <div className="price">PKR {book.price}</div>
                     </li>
                   </ul>
                   <a href={`/book/${book.id}`} className="btn btn-full btn-view">

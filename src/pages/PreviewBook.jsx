@@ -71,23 +71,6 @@ const PreviewBook = () => {
       console.error("Fullscreen error:", err);
     }
   };
-  const saveBookmark = () => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-    iframe.contentWindow.postMessage({ type: "GET_PAGE" }, "*");
-    window.addEventListener(
-      "message",
-      (event) => {
-        if (event.data?.type === "CURRENT_PAGE") {
-          const page = event.data.page;
-          localStorage.setItem(`bookmark_${id}`, page);
-          setSavedPage(page);
-          toast.success(`Bookmarked page ${page}`);
-        }
-      },
-      { once: true }
-    );
-  };
   const handleRating = async (value) => {
     if (!userId) {
       toast.error("You must be logged in to rate.");
@@ -159,12 +142,6 @@ const PreviewBook = () => {
               }}
             />
           ))}
-          <button
-            onClick={saveBookmark}
-            className="icon-btn"
-            title="Bookmark page">
-            <BookmarkIcon className="icon" />
-          </button>
           {hasGooglePreview && (
             <button onClick={toggleFullscreen} className="icon-btn">
               {isFullscreen ? (
