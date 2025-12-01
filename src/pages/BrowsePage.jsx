@@ -233,7 +233,7 @@ const BrowsePage = () => {
                 checked={filters.price.includes("10-20")}
                 onChange={handleFilterChange}
               />
-              PKR 10 - PKR 20
+              PKR 10 - PKR 20 
             </label>
             <label>
               <input
