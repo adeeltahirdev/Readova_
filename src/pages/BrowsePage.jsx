@@ -223,7 +223,7 @@ const BrowsePage = () => {
                 checked={filters.price.includes("0-10")}
                 onChange={handleFilterChange}
               />
-              Under $10
+              Under PKR 10
             </label>
             <label>
               <input
@@ -233,7 +233,7 @@ const BrowsePage = () => {
                 checked={filters.price.includes("10-20")}
                 onChange={handleFilterChange}
               />
-              $10 - $20
+              PKR 10 - PKR 20
             </label>
             <label>
               <input
@@ -243,7 +243,7 @@ const BrowsePage = () => {
                 checked={filters.price.includes("20+")}
                 onChange={handleFilterChange}
               />
-              Over $20
+              Over PKR 20
             </label>
           </div>
 
@@ -286,7 +286,7 @@ const BrowsePage = () => {
                     {book.rating ? `⭐ ${book.rating}` : "⭐ N/A"}
                   </div>
                   <div className="b-price">
-                    {book.price ? `$${book.price}` : "Price not set"}
+                    {book.price ? `PKR ${book.price}` : "Price not set"}
                   </div>
                   <Link to={`/book/${book.id}`} className="btn btn-full btn-view">View</Link>
                 </div>

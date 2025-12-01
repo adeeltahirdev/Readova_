@@ -195,7 +195,7 @@ const BooksManagement = () => {
                           <td>{book.title}</td>
                           <td>{book.authors}</td>
                           <td>{book.categories}</td>
-                          <td>${book.price}</td>
+                          <td>PKR {book.price}</td>
                           <td className="action-buttons">
                             <button
                               className="btn-action btn-delete"
