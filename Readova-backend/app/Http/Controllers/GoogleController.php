@@ -169,7 +169,7 @@ class GoogleController extends Controller
     public function show(Request $request)
     {
         $query = $request->input('q');
-        $books = Books::query()
+        $books = Books::withAvg('ratings', 'rating')
             ->when($query, function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                     ->orWhere('authors', 'like', "%{$query}%")
@@ -188,6 +188,12 @@ class GoogleController extends Controller
                 'page_count',
                 'price',
             ]);
+        $books->transform(function ($book) {
+            $book->rating = $book->ratings_avg_rating ? round($book->ratings_avg_rating, 1) : null;
+            unset($book->ratings_avg_rating);
+            return $book;
+        });
+
         return response()->json([
             'total' => $books->count(),
             'books' => $books,
@@ -319,9 +325,20 @@ class GoogleController extends Controller
         $borrowRevenue = Borrow::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->sum('price');
+        $recentBorrows = Borrow::with(['user', 'book'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $recentSubs = Subscription::with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $newUsers = \App\Models\User::orderBy('created_at', 'desc')
+            ->get();
         return response()->json([
             'active_subscriptions' => $activeSubs,
-            'monthly_revenue' => $subRevenue + $borrowRevenue
+            'monthly_revenue'      => $subRevenue+$borrowRevenue,
+            'recent_borrows'       => $recentBorrows,
+            'recent_subscriptions' => $recentSubs,
+            'new_users'            => $newUsers
         ]);
     }
 }

@@ -99,7 +99,7 @@ const SubscriptionCheckout = () => {
                         You are about to subscribe to the **Premium Plan**. You will get unlimited access to **ALL** books in our library for 1 month.
                     </p>
                     <div className="price-tag" style={{fontSize: "2rem", color: "#28a745", fontWeight: "bold", marginBottom: "30px"}}>
-                        ${currentPlanPrice.toFixed(2)} / month
+                        PKR{currentPlanPrice.toFixed(2)} / month
                     </div>
                     <button
                         className="checkout-button"
@@ -120,7 +120,7 @@ const SubscriptionCheckout = () => {
                 <div className="checkout-left">
                     <div className="checkout-header">
                         <h2>Select Books</h2> 
-                        <p>Plan Price: <span style={{color: '#2563eb', fontWeight: '700'}}>${currentPlanPrice.toFixed(2)}/month</span></p>
+                        <p>Plan Price: <span style={{color: '#2563eb', fontWeight: '700'}}>PKR{currentPlanPrice.toFixed(2)}/month</span></p>
                     </div>
                     
                     <input

@@ -43,7 +43,7 @@ const Pricing = () => {
                         <div className="plan-card basic">
                             <h2 className="heading-secondary">Basic</h2>
                             <p className="plan-description">Perfect for casual readers who want to explore our library</p>
-                            <div className="price-large">$9.99</div>
+                            <div className="price-large">PKR 9.99</div>
                             <div className="price-period">per month</div>
                             
                             <ul className="list">
@@ -67,7 +67,7 @@ const Pricing = () => {
                             <div className="popular-badge">MOST POPULAR</div>
                             <h2 className="heading-secondary">Premium</h2>
                             <p className="plan-description">Ideal for avid readers who want the full Readova experience</p>
-                            <div className="price-large">$19.99</div>
+                            <div className="price-large">PKR 19.99</div>
                             <div className="price-period">per month</div>
                             
                             <ul className="list">

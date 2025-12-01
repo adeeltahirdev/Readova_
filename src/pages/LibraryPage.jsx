@@ -17,9 +17,9 @@ const LibraryPage = () => {
     const fetchData = async () => {
       try {
         if (!userId) {
-            toast.error("Please login to view library");
-            navigate('/auth/login');
-            return;
+          toast.error("Please login to view library");
+          navigate('/auth/login');
+          return;
         }
         const libRes = await api.get(`/library/my-books?user_id=${userId}`);
         setBorrowedBooks(libRes.data.borrowed_books || []);
@@ -27,9 +27,9 @@ const LibraryPage = () => {
         setPlanType(libRes.data.plan_type);
         const wishRes = await api.get(`/wishlist?user_id=${userId}`);
         setWishlistBooks(wishRes.data.books || wishRes.data);
-        const savedRecent = localStorage.getItem("recentBook");
+        const savedRecent = localStorage.getItem(`recentBook_${userId}`);;
         if (savedRecent) {
-            setRecentBook(JSON.parse(savedRecent));
+          setRecentBook(JSON.parse(savedRecent));
         }
       } catch (error) {
         console.error("Library fetch error", error);
@@ -80,6 +80,7 @@ const LibraryPage = () => {
               <p className="font-one" style={{textTransform: "capitalize"}}>{planType || "None"}</p>
             </div>
           </div>
+
           {recentBook && (
             <div className="section">
                 <h2 className="heading-secondary">Continue Reading</h2>
@@ -102,10 +103,17 @@ const LibraryPage = () => {
             
             {uniqueDisplayBooks.length === 0 ? (
                 <div style={{textAlign: "center", padding: "100px", color: "#666"}}>
-                    <p style={{fontSize:"12px"}}>You haven't borrowed or subscribed to any books yet.</p>
-                    {planType === 'premium' && <p>You have Premium! Go to any book and read it instantly.</p>}
-                    <Link to="/browse" className="btn btn-full">Browse Books</Link>
-                    <Link to="/pricing" className="btn btn-outline btn-library">Subscribed Plan</Link>
+                    {planType === 'premium' ? (
+                        <p style={{marginTop: '15px', fontWeight: 'bold', color: '#2c3e50'}}>
+                            You have Premium! Go to any book and read it instantly.
+                        </p>
+                    ) : (
+                        <>
+                        <p style={{fontSize:"12px"}}>You haven't borrowed or subscribed to any books yet.</p>
+                            <Link to="/browse" className="btn btn-full">Browse Books</Link>
+                            <Link to="/pricing" className="btn btn-outline btn-library">Subscribed Plan</Link>
+                        </>
+                    )}
                 </div>
             ) : (
                 <div className="book-cards">

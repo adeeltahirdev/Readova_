@@ -283,7 +283,7 @@ const BrowsePage = () => {
                   <h3>{book.title}</h3>
                   <p>{book.author}</p>
                   <div className="b-rating">
-                    {book.rating ? `⭐ ${book.rating}` : "⭐ N/A"}
+                    {book.rating ? "⭐".repeat(book.rating) : "⭐ N/A"}
                   </div>
                   <div className="b-price">
                     {book.price ? `PKR ${book.price}` : "Price not set"}
